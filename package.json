@@ -1,11 +1,22 @@
 {
   "name": "coronadashboard",
-  "version": "1.0.0",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "debug": "^2.6.9",
+    "express": "^4.16.4",
+    "http-errors": "^1.6.3",
+    "morgan": "^1.9.1",
+    "pug": "^3.0.0",
+    "sqlite3": "^5.0.0"
+  },
   "description": "",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/FelixGeisler/CoronaDashboard.git"
@@ -15,9 +26,5 @@
   "bugs": {
     "url": "https://github.com/FelixGeisler/CoronaDashboard/issues"
   },
-  "homepage": "https://github.com/FelixGeisler/CoronaDashboard#readme",
-  "dependencies": {
-    "express": "^4.17.1",
-    "sqlite3": "^5.0.0"
-  }
+  "homepage": "https://github.com/FelixGeisler/CoronaDashboard#readme"
 }
