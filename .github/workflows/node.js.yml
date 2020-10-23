@@ -27,8 +27,3 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-      
-    - name: Super-Linter
-      uses: github/super-linter@v3.13.2
-      env:
-        FILTER_REGEX_EXCLUDE: node_modules/.*
