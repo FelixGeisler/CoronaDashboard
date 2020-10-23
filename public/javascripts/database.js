@@ -4,19 +4,17 @@ const DBSOURCE = 'db.sqlite'
 const db = new sqlite3.Database(DBSOURCE, (err) => {
   if (err) {
     // Cannot open database
-    console.error(err.message);
+    console.error(err.message)
     throw err
   } else {
     console.log('Connected to the SQLite database.')
-    db.run(`CREATE TABLE corona (
-        Bundesland text PRIMARY KEY)`,
-      (err) => {
-        if (err) {
-          console.log('Table corona already existing.')
-        } else {
-          console.log('Table corona created.')
-        }
-      })
+    db.run(`CREATE TABLE corona (Bundesland text PRIMARY KEY)`, (err) => {
+      if (err) {
+        console.log('Table corona already existing.')
+      } else {
+        console.log('Table corona created.')
+      }
+    })
   }
 })
 

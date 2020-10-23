@@ -22,18 +22,20 @@ router.get('/api/bundesland', (req, res, next) => {
     // The whole response has been received.
     resp.on('end', () => {
       dataBl = JSON.parse(data).features
-      for (let i = 0; i < data_bl.length; i++) {
+      for (let i = 0; i < dataBl.length; i++) {
         var sql = ('INSERT INTO corona (Bundesland) VALUES (?)')
-        var params = [data_bl[i].attributes.LAN_ew_GEN]
-        db.run(sql, params, function (err, result) { }).on('error', (err) => {
-          console.log('Error: ' + err.message)
+        var params = [dataBl[i].attributes.LAN_ew_GEN]
+        db.run(sql, params, function (err, result) { 
+          if (err) {
+            return console.log(err.message)
+          }
         })
       }
     })
   }).on('error', (err) => {
     console.log('Error: ' + err.message)
   })
-  res.end(JSON.stringify(data_bl))
+  res.end(JSON.stringify(dataBl))
 })
 
 module.exports = router
