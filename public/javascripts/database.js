@@ -8,7 +8,7 @@ const db = new sqlite3.Database(DBSOURCE, (err) => {
     throw err
   } else {
     console.log('Connected to the SQLite database.')
-    db.run(`CREATE TABLE corona (Bundesland text PRIMARY KEY)`, (err) => {
+    db.run('CREATE TABLE corona (Bundesland text PRIMARY KEY)', (err) => {
       if (err) {
         console.log('Table corona already existing.')
       } else {

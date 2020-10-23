@@ -25,7 +25,7 @@ router.get('/api/bundesland', (req, res, next) => {
       for (let i = 0; i < dataBl.length; i++) {
         var sql = ('INSERT INTO corona (Bundesland) VALUES (?)')
         var params = [dataBl[i].attributes.LAN_ew_GEN]
-        db.run(sql, params, function (err, result) { 
+        db.run(sql, params, function (err, result) {
           if (err) {
             return console.log(err.message)
           }
