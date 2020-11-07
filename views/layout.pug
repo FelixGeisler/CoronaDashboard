@@ -1,7 +1,30 @@
 doctype html
-html
+html(lang='en')
   head
-    title= title
+    meta(charset="utf-8")
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/node_modules/bootstrap/dist/css/bootstrap.css')
+    title= title
   body
+    div.header-bar
+      div.container
+        div.row
+          #title.col-md-3.m-auto
+            img.pr-2.float-left(src='/images/virus_32.png')
+            a #{title}
+          #desc.col-md-4.float-left.m-auto
+            a Team Kombistudium
+            a Webanwendungen 2 - Praktikum
+          div.col-md-2.m-auto
+            select(name="bundesland")
+              option.disabled.hidden.selected Bundesland
+          div.col-md-2.m-auto
+            select(name="landkreis")
+              option.disabled.hidden.selected Landkreis
+          div.col-md-1.m-auto
+            img.float-right(src='/images/calendar_32.png')
+
     block content
+
+    script(src='/node_modules/jquery/dist/jquery.js')
+    script(src='/node_modules/bootstrap/dist/js/bootstrap.bundle.js')

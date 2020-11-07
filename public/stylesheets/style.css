@@ -1,8 +1,36 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.header-bar {
+       background-color: #1979cc;
+       color: #fff;
+       padding: 10px 10px;
+       text-align: center;
+       font-size: 1.2rem;
+       font-weight: 600;
 }
 
-a {
-  color: #00b7ff;
+#title {
+    border-right: solid;
+    font-size: 1.4rem;
+}
+
+#desc a {
+    float: left;
+}
+
+select {
+    width: 100%;
+    padding-left: 10px;
+    background-color: #3f9cdd;
+    color: #fff;
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    cursor: pointer;
+    outline: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    border: none;
+}
+
+select option {
+    color: #666;
 }

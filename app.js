@@ -10,6 +10,7 @@ var app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
+app.use('/node_modules', express.static(__dirname + '/node_modules'));
 app.set('view engine', 'pug')
 
 app.use(logger('dev'))
@@ -35,5 +36,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
 })
+
+app.set('port', process.env.PORT || 8080)
+app.listen(app.get('port'))
 
 module.exports = app
