@@ -1,5 +1,5 @@
-var sqlite3 = require('sqlite3').verbose()
-var https = require('https')
+let sqlite3 = require('sqlite3').verbose()
+let https = require('https')
 
 const db = new sqlite3.Database('database/db.sqlite', (err) => {
   if (err) {
@@ -11,12 +11,9 @@ const db = new sqlite3.Database('database/db.sqlite', (err) => {
     console.log('Connected to the SQLite database.')
 
     // Create db if not exists
-    db.run('CREATE TABLE IF NOT EXISTS Bundesland (Date TEXT, Bundesland TEXT, Inhabitants INTEGER, Cases INTEGER, CasesPer100k REAL,\
-      Deaths INTEGER, Incidence REAL, PRIMARY KEY (Date, Bundesland));')
+    db.run('CREATE TABLE IF NOT EXISTS Bundesland (Date TEXT, Bundesland TEXT, Inhabitants INTEGER, Cases INTEGER, CasesPer100k REAL, Deaths INTEGER, Incidence REAL, PRIMARY KEY (Date, Bundesland));')
 
-    db.run('CREATE TABLE IF NOT EXISTS Landkreis (Date TEXT, Landkreis TEXT, Bundesland TEXT, Inhabitants INTEGER, Cases INTEGER,\
-      CasesPer100k REAL, CasesPerPopulation REAL, Cases7Per100k REAL, Cases7BlPer100k REAL, Deaths INTEGER,\
-      DeathRate REAL, PRIMARY KEY (Date, Landkreis));')
+    db.run('CREATE TABLE IF NOT EXISTS Landkreis (Date TEXT, Landkreis TEXT, Bundesland TEXT, Inhabitants INTEGER, Cases INTEGER, CasesPer100k REAL, CasesPerPopulation REAL, Cases7Per100k REAL, Cases7BlPer100k REAL, Deaths INTEGER, DeathRate REAL, PRIMARY KEY (Date, Landkreis));')
 
     // Update db Bundesland
     https.get('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Coronafälle_in_den_Bundesländern/FeatureServer/0/query?where=1%3D1&outFields=LAN_ew_GEN,LAN_ew_EWZ,Fallzahl,Aktualisierung,faelle_100000_EW,Death,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json', (resp) => {
@@ -29,23 +26,24 @@ const db = new sqlite3.Database('database/db.sqlite', (err) => {
 
       // The whole response has been received.
       resp.on('end', () => {
-        dataBl = JSON.parse(data).features
+        let dataBl = JSON.parse(data).features
         for (let i = 0; i < dataBl.length; i++) {
           db.run(`INSERT INTO Bundesland (Date, Bundesland, Inhabitants, Cases, CasesPer100k, Deaths, Incidence) VALUES(?, ?, ?, ?, ?, ?, ?)`,
-            [new Date().toISOString().slice(0, 10),
-            dataBl[i].attributes['LAN_ew_GEN'],
-            dataBl[i].attributes['LAN_ew_EWZ'],
-            dataBl[i].attributes['Fallzahl'],
-            dataBl[i].attributes['faelle_100000_EW'],
-            dataBl[i].attributes['Death'],
-            dataBl[i].attributes['cases7_bl_per_100k']
+            [
+              new Date().toISOString().slice(0, 10),
+              dataBl[i].attributes.LAN_ew_GEN,
+              dataBl[i].attributes.LAN_ew_EWZ,
+              dataBl[i].attributes.Fallzahl,
+              dataBl[i].attributes.faelle_100000_EW,
+              dataBl[i].attributes.Death,
+              dataBl[i].attributes.cases7_bl_per_100k
             ], function (err) {
               if (err) {
-                return console.log(err.message);
+                return console.log(err.message)
               }
               // get the last insert id
-              console.log(`A row has been inserted with PRIMARY KEY: ${new Date().toISOString().slice(0, 10)} ${dataBl[i].attributes['LAN_ew_GEN']}`);
-            });
+              console.log(`A row has been inserted with PRIMARY KEY: ${new Date().toISOString().slice(0, 10)} ${dataBl[i].attributes.LAN_ew_GEN}`)
+            })
         }
       })
     }).on('error', (err) => {
@@ -63,28 +61,28 @@ const db = new sqlite3.Database('database/db.sqlite', (err) => {
 
       // The whole response has been received.
       resp.on('end', () => {
-        dataLk = JSON.parse(data).features
+        let dataLk = JSON.parse(data).features
         for (let i = 0; i < dataLk.length; i++) {
-          db.run(`INSERT INTO Landkreis (Date, Landkreis, Bundesland, Inhabitants, Cases, CasesPer100k, CasesPerPopulation,\
-            Cases7Per100k, Cases7BlPer100k, Deaths, DeathRate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            [new Date().toISOString().slice(0, 10),
-            dataLk[i].attributes['county'],
-            dataLk[i].attributes['BL'],
-            dataLk[i].attributes['EWZ'],
-            dataLk[i].attributes['cases'],
-            dataLk[i].attributes['cases_per_100k'],
-            dataLk[i].attributes['cases_per_population'],
-            dataLk[i].attributes['cases7_per_100k'],
-            dataLk[i].attributes['cases7_bl_per_100k'],
-            dataLk[i].attributes['deaths'],
-            dataLk[i].attributes['death_rate'],
+          db.run(`INSERT INTO Landkreis (Date, Landkreis, Bundesland, Inhabitants, Cases, CasesPer100k, CasesPerPopulation, Cases7Per100k, Cases7BlPer100k, Deaths, DeathRate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              new Date().toISOString().slice(0, 10),
+              dataLk[i].attributes.county,
+              dataLk[i].attributes.BL,
+              dataLk[i].attributes.EWZ,
+              dataLk[i].attributes.cases,
+              dataLk[i].attributes.cases_per_100k,
+              dataLk[i].attributes.cases_per_population,
+              dataLk[i].attributes.cases7_per_100k,
+              dataLk[i].attributes.cases7_bl_per_100k,
+              dataLk[i].attributes.deaths,
+              dataLk[i].attributes.death_rate
             ], function (err) {
               if (err) {
-                return console.log(err.message);
+                return console.log(err.message)
               }
               // get the last insert id
-              console.log(`A row has been inserted with PRIMARY KEY: ${new Date().toISOString().slice(0, 10)} ${dataLk[i].attributes['county']}`);
-            });
+              console.log(`A row has been inserted with PRIMARY KEY: ${new Date().toISOString().slice(0, 10)} ${dataLk[i].attributes.county}`)
+            })
         }
       })
     }).on('error', (err) => {

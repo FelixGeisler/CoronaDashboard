@@ -3,20 +3,20 @@
        color: #fff;
        padding: 10px 10px;
        text-align: center;
-       font-size: 1.2rem;
        font-weight: 600;
 }
 
 #title {
     border-right: solid;
     font-size: 1.4rem;
+    text-align: right;
 }
 
 #desc a {
     float: left;
 }
 
-select {
+select, input {
     width: 100%;
     padding-left: 10px;
     background-color: #3f9cdd;

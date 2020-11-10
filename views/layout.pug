@@ -7,23 +7,28 @@ html(lang='en')
     title= title
   body
     div.header-bar
-      div.container
+      div.container-fluid
         div.row
-          #title.col-md-3.m-auto
-            img.pr-2.float-left(src='/images/virus_32.png')
-            a #{title}
-          #desc.col-md-4.float-left.m-auto
-            a Team Kombistudium
-            a Webanwendungen 2 - Praktikum
-          div.col-md-2.m-auto
-            select(name="bundesland")
-              option.disabled.hidden.selected Bundesland
-          div.col-md-2.m-auto
-            select(name="landkreis")
-              option.disabled.hidden.selected Landkreis
-          div.col-md-1.m-auto
+          div.col-lg-1
+          div.col-lg-4
+            #title.col-lg-6.float-left
+              img.pr-2(src='/images/virus_32.png')
+              a #{title}
+            #desc.col-lg-6.float-left
+              a Team Kombistudium
+              a Webanwendungen 2 - Praktikum
+          div.col-lg-5
+            div.col-lg-5.float-left
+              select(name="bundesland")
+                option.disabled.hidden.selected Bundesland
+            div.col-lg-5.float-left
+              select(name="landkreis")
+                option.disabled.hidden.selected Landkreis
+            div.col-lg-2.float-left
+              input(type="button", value="Tables")
+          div.col-lg-1
             img.float-right(src='/images/calendar_32.png')
-
+          div.col-lg-1
     block content
 
     script(src='/node_modules/jquery/dist/jquery.js')
