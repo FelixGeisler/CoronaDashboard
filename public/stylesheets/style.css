@@ -1,36 +1,37 @@
 .header-bar {
-       background-color: #1979cc;
-       color: #fff;
-       padding: 10px 10px;
-       text-align: center;
-       font-weight: 600;
+  background-color: #1979cc;
+  color: #fff;
+  padding: 10px 10px;
+  text-align: center;
+  font-weight: 600;
 }
 
 #title {
-    border-right: solid;
-    font-size: 1.4rem;
-    text-align: right;
+  border-right: solid;
+  font-size: 1.4rem;
+  text-align: right;
 }
 
 #desc a {
-    float: left;
+  float: left;
 }
 
-select, input {
-    width: 100%;
-    padding-left: 10px;
-    background-color: #3f9cdd;
-    color: #fff;
-    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-    cursor: pointer;
-    outline: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
-    border: none;
+select, 
+input {
+  width: 100%;
+  padding-left: 10px;
+  background-color: #3f9cdd;
+  color: #fff;
+  box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
 }
 
 select option {
-    color: #666;
+  color: #666;
 }

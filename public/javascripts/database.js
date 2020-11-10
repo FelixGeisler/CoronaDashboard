@@ -1,5 +1,5 @@
-let sqlite3 = require('sqlite3').verbose()
-let https = require('https')
+const sqlite3 = require('sqlite3').verbose()
+const https = require('https')
 
 const db = new sqlite3.Database('database/db.sqlite', (err) => {
   if (err) {
@@ -26,9 +26,9 @@ const db = new sqlite3.Database('database/db.sqlite', (err) => {
 
       // The whole response has been received.
       resp.on('end', () => {
-        let dataBl = JSON.parse(data).features
+        const dataBl = JSON.parse(data).features
         for (let i = 0; i < dataBl.length; i++) {
-          db.run(`INSERT INTO Bundesland (Date, Bundesland, Inhabitants, Cases, CasesPer100k, Deaths, Incidence) VALUES(?, ?, ?, ?, ?, ?, ?)`,
+          db.run('INSERT INTO Bundesland (Date, Bundesland, Inhabitants, Cases, CasesPer100k, Deaths, Incidence) VALUES(?, ?, ?, ?, ?, ?, ?)',
             [
               new Date().toISOString().slice(0, 10),
               dataBl[i].attributes.LAN_ew_GEN,
@@ -61,9 +61,9 @@ const db = new sqlite3.Database('database/db.sqlite', (err) => {
 
       // The whole response has been received.
       resp.on('end', () => {
-        let dataLk = JSON.parse(data).features
+        const dataLk = JSON.parse(data).features
         for (let i = 0; i < dataLk.length; i++) {
-          db.run(`INSERT INTO Landkreis (Date, Landkreis, Bundesland, Inhabitants, Cases, CasesPer100k, CasesPerPopulation, Cases7Per100k, Cases7BlPer100k, Deaths, DeathRate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          db.run('INSERT INTO Landkreis (Date, Landkreis, Bundesland, Inhabitants, Cases, CasesPer100k, CasesPerPopulation, Cases7Per100k, Cases7BlPer100k, Deaths, DeathRate) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
               new Date().toISOString().slice(0, 10),
               dataLk[i].attributes.county,
