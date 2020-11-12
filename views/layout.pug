@@ -3,33 +3,23 @@ html(lang='en')
   head
     meta(charset="utf-8")
     link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/node_modules/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet', href='/bootstrap/dist/css/bootstrap.css')
     title= title
-  body
-    div.header-bar
-      div.container-fluid
+    body
+      nav.navbar.navbar-expand-lg.navbar-dark(style='background-color: #016ab6;')
         div.row
-          div.col-lg-1
-          div.col-lg-4
-            #title.col-lg-6.float-left
-              img.pr-2(src='/images/virus_32.png')
-              a #{title}
-            #desc.col-lg-6.float-left
-              a Team Kombistudium
-              a Webanwendungen 2 - Praktikum
-          div.col-lg-5
-            div.col-lg-5.float-left
-              select(name="bundesland")
-                option.disabled.hidden.selected Bundesland
-            div.col-lg-5.float-left
-              select(name="landkreis")
-                option.disabled.hidden.selected Landkreis
-            div.col-lg-2.float-left
-              input(type="button", value="Tables")
-          div.col-lg-1
-            img.float-right(src='/images/calendar_32.png')
-          div.col-lg-1
-    block content
+          div.col-lg-6.float-left(href='/')
+            a.navbar-brand
+              img(src='/images/virus_32.png' width='30' height='30')
+            a.navbar-brand.align-middle #{title} | Team Kombistudium
+          div.col-lg-6.float-left.text-right
+            select(name='bundesland')
+              option.disabled.hidden.selected Bundesland
+            select(name='landkreis')
+              option.disabled.hidden.selected Landkreis
+            input(type="button", value="Table")
+            img(src="/images/calendar_32.png", alt="")
+      block content
 
-    script(src='/node_modules/jquery/dist/jquery.js')
-    script(src='/node_modules/bootstrap/dist/js/bootstrap.bundle.js')
+    script(src='/jquery/dist/jquery.js')
+    script(src='/bootstrap/dist/js/bootstrap.bundle.js')

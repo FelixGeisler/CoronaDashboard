@@ -1,25 +1,11 @@
-.header-bar {
-  background-color: #1979cc;
-  color: #fff;
-  padding: 10px 10px;
-  text-align: center;
-  font-weight: 600;
-}
-
-#title {
-  border-right: solid;
-  font-size: 1.4rem;
-  text-align: right;
-}
-
-#desc a {
-  float: left;
+.row {
+  width: 100%;
 }
 
 select,
 input {
-  width: 100%;
-  padding-left: 10px;
+  width: 15%;
+  height: 3em;
   background-color: #3f9cdd;
   color: #fff;
   box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.3);
@@ -30,8 +16,13 @@ input {
   -webkit-appearance: none;
   appearance: none;
   border: none;
+  margin-right: 5% !important;
 }
 
-select option {
-  color: #666;
+input {
+  padding-left: 1%;
+}
+
+img {
+  cursor: pointer;
 }

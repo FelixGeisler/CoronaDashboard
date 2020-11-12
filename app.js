@@ -36,7 +36,4 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
-app.set('port', process.env.PORT || 80)
-app.listen(app.get('port'))
-
 module.exports = app

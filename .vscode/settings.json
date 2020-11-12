@@ -1,8 +1,4 @@
 {
-    "appService.zipIgnorePattern": [
-        "node_modules{,/**}",
-        ".vscode{,/**}"
-    ],
-    "appService.defaultWebAppToDeploy": "/subscriptions/bec9462c-0fc2-4cda-a3ee-80f09cb4b88b/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/corona-dashobard",
+    "appService.defaultWebAppToDeploy": "/subscriptions/bec9462c-0fc2-4cda-a3ee-80f09cb4b88b/resourceGroups/corona-dashboard/providers/Microsoft.Web/sites/corona-dashboard",
     "appService.deploySubpath": "."
 }
