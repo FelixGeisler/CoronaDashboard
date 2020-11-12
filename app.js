@@ -3,6 +3,8 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const cron = require('node-cron')
+
 const indexRouter = require('./routes/index')
 
 const app = express()
@@ -34,6 +36,13 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500)
   res.render('error')
+})
+
+cron.schedule('0 4 * * *', function() {
+  const database = require('./public/javascripts/database.js')
+  // TODO: better logging.
+  console.log('Fetching data from rki-api...')
+  console.log('Saving data to database...')
 })
 
 module.exports = app
