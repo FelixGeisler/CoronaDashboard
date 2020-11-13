@@ -1,4 +1,16 @@
 extends layout
 
 block content
-  h1 Hallo vom index
+  .row
+    .col-lg-3
+      div
+        a Infektionen:
+        a#new_cases
+      div
+        a Todesfälle:
+        a#new_deaths
+    .col-lg-6
+    .col-lg-3
+      canvas#cases
+      canvas#deaths
+  .row

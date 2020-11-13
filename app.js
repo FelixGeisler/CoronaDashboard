@@ -6,6 +6,7 @@ const logger = require('morgan')
 const cron = require('node-cron')
 
 const indexRouter = require('./routes/index')
+const apiRouter = require('./routes/api')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
+app.get('/api', apiRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -38,7 +40,7 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
-cron.schedule('0 4 * * *', function() {
+cron.schedule('0 * * * *', function() {
   const database = require('./public/javascripts/database.js')
   // TODO: better logging.
   console.log('Fetching data from rki-api...')

@@ -13,13 +13,14 @@ html(lang='en')
               img(src='/images/virus_32.png' width='30' height='30')
             a.navbar-brand.align-middle #{title} | Team Kombistudium
           div.col-lg-6.float-left.text-right
-            select(name='bundesland')
-              option.disabled.hidden.selected Bundesland
+            select(name= 'bundesland')
+              option.selected Deutschland
             select(name='landkreis')
-              option.disabled.hidden.selected Landkreis
             input(type="button", value="Table")
             img(src="/images/calendar_32.png", alt="")
       block content
 
     script(src='/jquery/dist/jquery.js')
     script(src='/bootstrap/dist/js/bootstrap.bundle.js')
+    script(src='/chart.js/dist/Chart.bundle.js')
+    script(src='/javascripts/index.js')
