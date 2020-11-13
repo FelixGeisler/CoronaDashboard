@@ -22,7 +22,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
-app.get('/api', apiRouter)
+app.get('/api/:date?/:bl?/:lk?', apiRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

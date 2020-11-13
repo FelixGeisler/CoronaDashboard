@@ -10,45 +10,7 @@ const db = new sqlite3.Database('database/db.sqlite', (err) => {
     // Opened successfully
     console.log('Connected to the SQLite database.')
 
-    // Create db if not exists
-    db.run('CREATE TABLE IF NOT EXISTS Bundesland (Date TEXT, Bundesland TEXT, Inhabitants INTEGER, Cases INTEGER, CasesPer100k REAL, Deaths INTEGER, Incidence REAL, PRIMARY KEY (Date, Bundesland));')
-
     db.run('CREATE TABLE IF NOT EXISTS Landkreis (Date TEXT, Landkreis TEXT, Bundesland TEXT, Inhabitants INTEGER, Cases INTEGER, CasesPer100k REAL, CasesPerPopulation REAL, Cases7Per100k REAL, Cases7BlPer100k REAL, Deaths INTEGER, DeathRate REAL, PRIMARY KEY (Date, Landkreis));')
-
-    // Update db Bundesland
-    https.get('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/Coronafälle_in_den_Bundesländern/FeatureServer/0/query?where=1%3D1&outFields=LAN_ew_GEN,LAN_ew_EWZ,Fallzahl,Aktualisierung,faelle_100000_EW,Death,cases7_bl_per_100k&returnGeometry=false&outSR=4326&f=json', (resp) => {
-      let data = ''
-
-      // A chunk of data has been received.
-      resp.on('data', (chunk) => {
-        data += chunk
-      })
-
-      // The whole response has been received.
-      resp.on('end', () => {
-        const dataBl = JSON.parse(data).features
-        for (let i = 0; i < dataBl.length; i++) {
-          db.run('REPLACE INTO Bundesland (Date, Bundesland, Inhabitants, Cases, CasesPer100k, Deaths, Incidence) VALUES(?, ?, ?, ?, ?, ?, ?)',
-            [
-              new Date().toISOString().slice(0, 10),
-              dataBl[i].attributes.LAN_ew_GEN,
-              dataBl[i].attributes.LAN_ew_EWZ,
-              dataBl[i].attributes.Fallzahl,
-              dataBl[i].attributes.faelle_100000_EW,
-              dataBl[i].attributes.Death,
-              dataBl[i].attributes.cases7_bl_per_100k
-            ], function (err) {
-              if (err) {
-                return console.log(err.message)
-              }
-              // get the last insert id
-              console.log(`A row has been inserted with PRIMARY KEY: ${new Date().toISOString().slice(0, 10)} ${dataBl[i].attributes.LAN_ew_GEN}`)
-            })
-        }
-      })
-    }).on('error', (err) => {
-      console.log('Error: ' + err.message)
-    })
 
     // Update db Landkreis
     https.get('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=BEZ,NBD,SN_L,SN_R,SN_K,EWZ,KFL,death_rate,cases,deaths,cases_per_100k,cases_per_population,BL,county,cases7_per_100k,recovered,EWZ_BL,cases7_bl_per_100k,IBZ,GEN&returnGeometry=false&outSR=4326&f=json', (resp) => {

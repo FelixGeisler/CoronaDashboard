@@ -3,69 +3,27 @@
 
 function getData () {
   $.getJSON('/api', function (data) {}).done(function (response) {
-    const dateCases = []
-    const dateDeaths = []
-    const countCases = []
-    const countDeaths = []
-    for (const i in response.cases) {
-      dateCases.push(i)
-      countCases.push(response.cases[i])
+    const dropBundesland = document.getElementById('bundesland')
+    dropBundesland.options[dropBundesland.options.length] = new Option('Germany', 'Germany')
+    for (bundesland in response.data) {
+        dropBundesland.options[dropBundesland.options.length] = new Option(bundesland, bundesland)
     }
-    for (const i in response.deaths) {
-      dateDeaths.push(i)
-      countDeaths.push(response.deaths[i])
-    }
-
-    Chart(ctxCases, {
-      type: 'line',
-      data: {
-        labels:
-        dateCases,
-        datasets: [{
-          label: '# of Cases',
-          data: countCases,
-          backgroundColor: ['rgba(63, 156, 221, 0.2)'],
-          borderColor: ['rgba(63, 156, 221, 1)'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
+    const dropLandkreis = document.getElementById('landkreis')
+    dropLandkreis.disabled = true
+    dropLandkreis.options[dropLandkreis.options.length] = new Option('All', 'All')
+    dropBundesland.addEventListener ('change', function () {
+        dropLandkreis.options.length = 0
+        dropLandkreis.options[dropLandkreis.options.length] = new Option('All', 'All')
+        if (!(this.value === 'Germany')) {
+            dropLandkreis.disabled = false
+            for (landkreis in response.data[this.value]) {
+                dropLandkreis.options[dropLandkreis.options.length] = new Option(landkreis, landkreis)
             }
-          }]
+        } else {
+            dropLandkreis.disabled = true
         }
-      }
-    })
-
-    Chart(ctxDeaths, {
-      type: 'line',
-      data: {
-        labels: dateDeaths,
-        datasets: [{
-          label: '# of Deaths',
-          data: countDeaths,
-          backgroundColor: ['rgba(63, 156, 221, 0.2)'],
-          borderColor: ['rgba(63, 156, 221, 1)'],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
-      }
-    })
+     })
   })
 }
-
-const ctxCases = document.getElementById('cases').getContext('2d')
-const ctxDeaths = document.getElementById('deaths').getContext('2d')
 
 getData()
