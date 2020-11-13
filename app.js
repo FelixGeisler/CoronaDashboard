@@ -40,8 +40,8 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
-cron.schedule('0 * * * *', function() {
-  const database = require('./public/javascripts/database.js')
+cron.schedule('0 * * * *', function () {
+  require('./public/javascripts/database.js')
   // TODO: better logging.
   console.log('Fetching data from rki-api...')
   console.log('Saving data to database...')
