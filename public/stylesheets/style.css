@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow: hidden;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -121,6 +125,36 @@ svg {
   font-size: 1.6rem;
   line-height: 32px;
   margin-left: 1.2rem;
+}
+
+.footer {
+  height: 10%;
+  width: 100%;
+  position: absolute;
+  top: 90%;
+  left: 0;
+}
+
+.bottom {
+  height: 40%;
+  width: 100%;
+  position: absolute;
+  top: 60%;
+  left: 0;
+  background-color: #016ab6;
+}
+
+.tabs {
+  height: 100%;
+  width: 40%;
+  position: absolute;
+  top: 0;
+  left: 30%;
+}
+
+.chart, .data, .doc {
+  height: 100%;
+  width: 33%;
 }
 
 /*# sourceMappingURL=style.css.map */
