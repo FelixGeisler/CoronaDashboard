@@ -1,5 +1,6 @@
 const createError = require('http-errors')
 const express = require('express')
+const favicon = require('serve-favicon')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
@@ -12,6 +13,7 @@ const app = express()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')))
 app.use(express.static(path.join(__dirname, 'node_modules')))
 app.set('view engine', 'pug')
 

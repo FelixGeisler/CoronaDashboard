@@ -34,7 +34,6 @@ nav {
 #landkreis, #landkreislist {
   left: 70%;
 }
-
 .chosen-value {
   font-weight: 600;
   height: 4rem;
@@ -42,60 +41,70 @@ nav {
   padding: 1rem;
   background-color: #016ab6;
   border: 3px solid transparent;
-  transition: 0.3s ease-in-out;
-}
-.chosen-value::-webkit-input-placeholder {
-  color: #333;
-}
-.chosen-value:hover {
-  background-color: #0687c2;
-  cursor: pointer;
-}
-.chosen-value:hover::-webkit-input-placeholder {
-  color: #333;
-}
-.chosen-value:focus, .chosen-value.open {
-  box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
-  outline: 0;
-  background-color: #0687c2;
-  color: #fff;
-}
-.chosen-value:focus::-webkit-input-placeholder, .chosen-value.open::-webkit-input-placeholder {
-  color: #fff;
+  transition: .3s ease-in-out;
+  
+  &::-webkit-input-placeholder {
+    color: #333;
+  }
+  
+  &:hover {
+    background-color: #0687c2;
+    cursor: pointer;
+    
+    &::-webkit-input-placeholder {
+      color: #333;
+    }
+  }
+  
+  &:focus,
+  &.open {
+    box-shadow: 0px 5px 8px 0px rgba(0,0,0,0.2);
+    outline: 0;
+    background-color: #0687c2;
+    color: #fff;
+    
+    &::-webkit-input-placeholder {
+      color: #fff;
+    }
+  }
 }
 
 .value-list {
   list-style: none;
   margin-top: 4rem;
-  box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 5px 8px 0px rgba(0,0,0,0.2);
   overflow: hidden;
   max-height: 0;
-  transition: 0.3s ease-in-out;
-}
-.value-list.open {
-  max-height: 320px;
-  overflow: auto;
-}
-.value-list li {
-  position: relative;
-  height: 4rem;
-  background-color: #016ab6;
-  padding: 1rem;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  opacity: 1;
-}
-.value-list li:hover {
-  background-color: #0687c2;
-}
-.value-list li.closed {
-  max-height: 0;
-  overflow: hidden;
-  padding: 0;
-  opacity: 0;
+  transition: .3s ease-in-out;
+  
+  &.open {
+   max-height: 320px;
+   overflow: auto;
+  }
+  
+  li {
+    position: relative;
+    height: 4rem;
+    background-color: #016ab6;
+    padding: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color .3s;
+    opacity: 1;
+    
+    &:hover {
+      background-color: #0687c2;
+    }
+    
+    &.closed {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0;
+      opacity: 0;
+    }
+  }
 }
 
 svg {
@@ -103,7 +112,6 @@ svg {
   transition-duration: 0.8s;
   transition-property: transform;
 }
-
 .navbar-brand:hover > svg {
   transform: rotate(60deg);
   -webkit-transform: rotate(60deg);
@@ -122,5 +130,3 @@ svg {
   line-height: 32px;
   margin-left: 1.2rem;
 }
-
-/*# sourceMappingURL=style.css.map */
