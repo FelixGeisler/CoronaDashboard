@@ -19,7 +19,7 @@ body {
 nav {
   position: relative;
   color: #fff;
-  background-color: #016ab6;
+  background-color: #022d4d;
   height: 4rem;
 }
 
@@ -44,7 +44,7 @@ nav {
   height: 4rem;
   font-size: 1.1rem;
   padding: 1rem;
-  background-color: #016ab6;
+  background-color: #022d4d;
   border: 3px solid transparent;
   transition: 0.3s ease-in-out;
 }
@@ -52,7 +52,7 @@ nav {
   color: #333;
 }
 .chosen-value:hover {
-  background-color: #0687c2;
+  background-color: #18627f;
   cursor: pointer;
 }
 .chosen-value:hover::-webkit-input-placeholder {
@@ -61,7 +61,7 @@ nav {
 .chosen-value:focus, .chosen-value.open {
   box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
   outline: 0;
-  background-color: #0687c2;
+  background-color: #022d4d;
   color: #fff;
 }
 .chosen-value:focus::-webkit-input-placeholder, .chosen-value.open::-webkit-input-placeholder {
@@ -83,7 +83,7 @@ nav {
 .value-list li {
   position: relative;
   height: 4rem;
-  background-color: #016ab6;
+  background-color: #022d4d;
   padding: 1rem;
   font-size: 1.1rem;
   display: flex;
@@ -93,7 +93,7 @@ nav {
   opacity: 1;
 }
 .value-list li:hover {
-  background-color: #0687c2;
+  background-color: #18627f;
 }
 .value-list li.closed {
   max-height: 0;
@@ -128,10 +128,10 @@ svg {
 }
 
 .footer {
-  height: 10%;
+  height: 15%;
   width: 100%;
   position: absolute;
-  top: 90%;
+  top: 85%;
   left: 0;
 }
 
@@ -141,20 +141,85 @@ svg {
   position: absolute;
   top: 60%;
   left: 0;
-  background-color: #016ab6;
+  background-color: #022d4d;
 }
 
 .tabs {
-  height: 100%;
+  height: 70%;
   width: 40%;
   position: absolute;
-  top: 0;
+  top: 20%;
   left: 30%;
+  z-index: 1;
 }
 
 .chart, .data, .doc {
   height: 100%;
   width: 33%;
+  font-size: 1.6rem;
+  color: white;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pen {
+  fill: none;
+  stroke: #ff9412;
+  stroke-width: 30;
+  stroke-dasharray: 360 360;
+  stroke-dashoffset: 360;
+  animation-duration: 2s;
+  animation-name: draw;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.pen2 {
+  fill: none;
+  stroke: white;
+  stroke-width: 30;
+  stroke-dasharray: 170 170;
+  stroke-dashoffset: 170;
+  animation-duration: 2s;
+  animation-name: draw2;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+svg:hover .pen,
+svg:hover .pen2 {
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+}
+
+.clippedChart {
+  clip-path: url(#TabChart);
+}
+
+.clippedTable {
+  clip-path: url(#TabTable);
+}
+
+.clippedDoc {
+  clip-path: url(#TabDoc);
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 360;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes draw2 {
+  from {
+    stroke-dashoffset: 170;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 /*# sourceMappingURL=style.css.map */
