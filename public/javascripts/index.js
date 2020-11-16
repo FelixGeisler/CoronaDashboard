@@ -139,3 +139,20 @@ $.getJSON('api/2020-11-14/', function (data) {
         }
     });
 });
+
+let subNav = document.getElementById('subNav')
+let dateRange = document.getElementById('DateRange')
+let inOrOut = true
+
+dateRange.addEventListener("click", function() {
+    if (inOrOut) {
+        subNav.style.transform = "translateY(4rem)"
+        dateRange.style.transform = "translateY(4rem) scale(-1,-1)"
+        inOrOut = false
+    } else {
+        subNav.style.transform = "translateY(0)"
+        dateRange.style.transform = "translateY(0) scale(1,1)"
+        inOrOut = true
+    }
+})
+

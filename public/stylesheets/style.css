@@ -21,6 +21,16 @@ nav {
   color: #fff;
   background-color: #022d4d;
   height: 4rem;
+  z-index: 2;
+}
+
+#subNav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4rem;
+  width: 100%;
+  background-color: #022d4d;
   z-index: 1;
 }
 
@@ -261,5 +271,10 @@ svg:hover .pen2 {
     transform: translate(0, 0);
   }
 }
+/* 
+    TODO: 
+        - Shadows 
+        - Fix animation start point.
+*/
 
 /*# sourceMappingURL=style.css.map */
