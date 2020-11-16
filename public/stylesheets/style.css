@@ -21,6 +21,7 @@ nav {
   color: #fff;
   background-color: #022d4d;
   height: 4rem;
+  z-index: 1;
 }
 
 .chosen-value,
@@ -32,11 +33,13 @@ nav {
 }
 
 #bundesland, #bundeslandlist {
-  left: 50%;
+  left: 60%;
+  z-index: 2;
 }
 
 #landkreis, #landkreislist {
-  left: 70%;
+  left: 80%;
+  z-index: 2;
 }
 
 .chosen-value {
@@ -108,9 +111,13 @@ svg {
   transition-property: transform;
 }
 
+.navbar-brand {
+  cursor: pointer;
+}
+
 .navbar-brand:hover > svg {
-  transform: rotate(60deg);
-  -webkit-transform: rotate(60deg);
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
 }
 
 .navbar-brand > div, .navbar-brand > svg {
@@ -145,17 +152,17 @@ svg {
 }
 
 .tabs {
-  height: 70%;
-  width: 40%;
+  height: 80%;
+  width: 52%;
   position: absolute;
   top: 20%;
-  left: 30%;
+  left: 24%;
   z-index: 1;
 }
 
 .chart, .data, .doc {
   height: 100%;
-  width: 33%;
+  width: 33.33%;
   font-size: 1.6rem;
   color: white;
   text-align: center;
@@ -166,9 +173,9 @@ svg {
 .pen {
   fill: none;
   stroke: #ff9412;
-  stroke-width: 30;
-  stroke-dasharray: 360 360;
-  stroke-dashoffset: 360;
+  stroke-width: 34;
+  stroke-dasharray: 230 230;
+  stroke-dashoffset: 230;
   animation-duration: 2s;
   animation-name: draw;
   animation-timing-function: linear;
@@ -178,9 +185,9 @@ svg {
 .pen2 {
   fill: none;
   stroke: white;
-  stroke-width: 30;
-  stroke-dasharray: 170 170;
-  stroke-dashoffset: 170;
+  stroke-width: 4;
+  stroke-dasharray: 160 160;
+  stroke-dashoffset: 160;
   animation-duration: 2s;
   animation-name: draw2;
   animation-timing-function: linear;
@@ -207,7 +214,7 @@ svg:hover .pen2 {
 
 @keyframes draw {
   from {
-    stroke-dashoffset: 360;
+    stroke-dashoffset: 230;
   }
   to {
     stroke-dashoffset: 0;
@@ -215,10 +222,43 @@ svg:hover .pen2 {
 }
 @keyframes draw2 {
   from {
-    stroke-dashoffset: 170;
+    stroke-dashoffset: 160;
   }
   to {
     stroke-dashoffset: 0;
+  }
+}
+#DateRange {
+  position: absolute;
+  left: calc(50% - 2rem);
+  top: 1rem;
+  width: 4rem;
+  height: 5rem;
+  cursor: pointer;
+}
+
+#DateRange svg {
+  height: 5rem;
+  width: 4rem;
+}
+
+#DateRange:hover > svg {
+  animation-name: wiggle;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  transform-origin: 50% 50%;
+  display: inline-block;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, 7px);
+  }
+  100% {
+    transform: translate(0, 0);
   }
 }
 
