@@ -43,8 +43,7 @@ db.all(sql, [], (err, rows) => {
       bundesland.All.deaths += rows[index].Deaths
       bundesland.All.inhabitants += rows[index].Inhabitants
       bundesland.All.casesPerPopulation = bundesland.All.cases / bundesland.All.inhabitants * 100
-      bundesland.All.casesPer100k = bundesland.All.casesPerPopulation * 1000
-      
+      bundesland.All.casesPer100k = bundesland.All.casesPerPopulation * 1000 
     }
 
     router.get('/api/:date?/:bl?/:lk?', function (req, res, next) {
@@ -52,13 +51,13 @@ db.all(sql, [], (err, rows) => {
         if (dateParam === undefined) {
             res.json(data)
         } else {
-            const  blParam = req.params.bl
+            const blParam = req.params.bl
             if (dateParam.includes('_')) {
                 startDate = dateParam.split('_')[0]
                 endDate = dateParam.split('_')[1]
                 newData = {}
                 for (const item in data) {
-                    if (new Date(item) <= new Date(endDate)) {
+                    if (new Date(item) >= new Date(startDate) && new Date(item) <= new Date(endDate)) {
                         newData[item] = data[item]
                     }
                 }
@@ -94,7 +93,6 @@ db.all(sql, [], (err, rows) => {
             }
         }
     })
-
 })
 
 module.exports = router

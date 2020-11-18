@@ -1,30 +1,30 @@
 const createError = require('http-errors')
 const express = require('express')
-const favicon = require('serve-favicon')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
+const favicon = require('serve-favicon')
 const cron = require('node-cron')
 
-const indexRouter = require('./routes/index')
-const apiRouter = require('./routes/api')
+const router = require(path.join(__dirname, '/routes/index'))
 
 const app = express()
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')))
-app.use(express.static(path.join(__dirname, 'node_modules')))
 app.set('view engine', 'pug')
 
+// Middleware
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')))
+
+app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter)
-app.get('/api/:date?/:bl?/:lk?', apiRouter)
+app.use('/', router)
+app.get('/api/:date?/:bl?/:lk?', require(path.join(__dirname, '/routes/api')))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -43,10 +43,9 @@ app.use(function (err, req, res, next) {
 })
 
 cron.schedule('0 * * * *', function () {
-  require('./public/javascripts/database.js')
-  // TODO: better logging.
-  console.log('Fetching data from rki-api...')
-  console.log('Saving data to database...')
+  console.log('Running cron job...')
+  require(path.join(__dirname, '/database/database.js'))
+  // TODO: catch errors.
 })
 
 module.exports = app
