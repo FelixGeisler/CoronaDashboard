@@ -53,11 +53,26 @@ db.all(sql, [], (err, rows) => {
         } else {
             const blParam = req.params.bl
             if (dateParam.includes('_')) {
-                startDate = dateParam.split('_')[0]
+                startDate = new Date(dateParam.split('_')[0])
                 endDate = dateParam.split('_')[1]
+                if (endDate) {
+                    switch (endDate.split('-').length) {
+                        case 1:
+                            endDate = new Date(endDate, 12, 0)
+                            break
+                        case 2:
+                            endDate = new Date(endDate.split('-')[0], endDate.split('-')[1] + 1, 0)
+                            break
+                        default:
+                            endDate = new Date(endDate)
+                            break
+                    }
+                } else {
+                    endDate = new Date()                                                                        // Range, but no endDate given -> endDate = today()
+                }
                 newData = {}
                 for (const item in data) {
-                    if (new Date(item) >= new Date(startDate) && new Date(item) <= new Date(endDate)) {
+                    if (new Date(item) >= startDate && new Date(item) <= endDate) {
                         newData[item] = data[item]
                     }
                 }

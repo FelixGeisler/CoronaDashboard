@@ -20,7 +20,8 @@
     "node-cron": "^2.0.3",
     "pug": "^3.0.0",
     "serve-favicon": "^2.5.0",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.0.0",
+    "three": "^0.122.0"
   },
   "description": "",
   "main": "app.js",

@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 const favicon = require('serve-favicon')
 const cron = require('node-cron')
+const database = require(path.join(__dirname, '/database/database.js'))
 
 const router = require(path.join(__dirname, '/routes/index'))
 
@@ -25,6 +26,8 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', router)
 app.get('/api/:date?/:bl?/:lk?', require(path.join(__dirname, '/routes/api')))
+app.get('/geo/:bl?/:lk?', require(path.join(__dirname, '/routes/geo')))
+app.get('/globe', require(path.join(__dirname, '/routes/globe')))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -44,8 +47,9 @@ app.use(function (err, req, res, next) {
 
 cron.schedule('0 * * * *', function () {
   console.log('Running cron job...')
-  require(path.join(__dirname, '/database/database.js'))
+  database.runDB()
   // TODO: catch errors.
+  // TODO: check
 })
 
 module.exports = app
