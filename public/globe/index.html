@@ -113,6 +113,7 @@
     <span id="year1990" class="year">1990</span>
     <span id="year1995" class="year">1995</span>
     <span id="year2000" class="year">2000</span>
+    <button onclick="document.getElementById('myTune').play()">TEST</button> 
   </div>
 
   <div id="title">
@@ -122,6 +123,10 @@
   <a id="ce" href="http://www.chromeexperiments.com/globe">
     <span>This is a Chrome Experiment</span>
   </a>
+
+  <audio id="myTune">
+    <source src="audio.mp3">
+  </audio>
 
   <script type="text/javascript" src="/javascripts/modules/jquery.js"></script>
   <script type="text/javascript" src="/globe/third-party/Detector.js"></script>
@@ -163,7 +168,12 @@
       var xhr;
       TWEEN.start();
       
-      $.getJSON('../geo/', function(data) {
+      xhr = new XMLHttpRequest();
+      xhr.open('GET', '/globe/population909500.json', true);
+      xhr.onreadystatechange = function(e) {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
             window.data = data;
             for (i=0;i<data.length;i++) {
               globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
@@ -172,7 +182,10 @@
             settime(globe,0)();
             globe.animate();
             document.body.style.backgroundImage = 'none'; // remove loading
-      })
+          }
+        }
+      };
+      xhr.send(null);
     }
   </script>
 

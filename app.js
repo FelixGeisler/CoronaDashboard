@@ -26,7 +26,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', router)
 app.get('/api/:date?/:bl?/:lk?', require(path.join(__dirname, '/routes/api')))
-app.get('/geo/:bl?/:lk?', require(path.join(__dirname, '/routes/geo')))
 app.get('/globe', require(path.join(__dirname, '/routes/globe')))
 
 // catch 404 and forward to error handler
