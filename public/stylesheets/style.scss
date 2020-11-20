@@ -283,6 +283,13 @@ svg:hover .pen2 {
   }
 }
 
+svg g.Bundesland:hover polygon,
+svg g.Bundesland:hover path,
+svg g.Landkreis:hover polygon,
+svg g.Landkreis:hover path {
+  fill: #18627f;
+}
+
 /* 
     TODO: 
         - Shadows 
