@@ -3,6 +3,21 @@ extends layout
 block content
     .row
         .col-lg-4#data
+            // TODO- Get data from database
+            .row
+                p#deathCases Gesamte Todesfälle
+                p#deathCasesChange Veränderung der gesamten Todesfälle
+            .row
+                p#fullCases Gesamtfälle
+                p#fullCasesChange Veränderung der Gesamtfälle
+            .row
+                p#fullCasesPerToundredThousand Fälle pro 100.000 Einwohner
+                p#fullCasesPerToundredThousandChange Veränderung der Fälle pro 100.000 Einwohner
+
+            .row
+                p#casesOfTheLastSevenDays Gesamtfälle der letzten 7 Tage
+                p#casesOfTheLastSevenDaysChange Veränderung der Gesamtfälle der letzten 7 Tage
+
         .col-lg-4#map
             svg(width="525.334px" height="698px" viewBox="0 0 525.334 698")
                 //- Schleswig-Holstein
