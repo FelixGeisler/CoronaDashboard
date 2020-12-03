@@ -1,4 +1,4 @@
-db.sqlite
+database/db.sqlite
 node_modules/
 .vscode
 .deployment

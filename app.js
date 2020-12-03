@@ -27,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use('/', router)
 app.get('/api/:date?/:bl?/:lk?', require(path.join(__dirname, '/routes/api')))
 app.get('/globe', require(path.join(__dirname, '/routes/globe')))
+app.get('/table', require(path.join(__dirname, '/routes/table')))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

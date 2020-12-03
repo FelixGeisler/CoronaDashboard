@@ -2,6 +2,8 @@ const bundeslandField = document.getElementById('bundesland');
 const landkreisField = document.getElementById('landkreis');
 const bundeslandDrop = document.getElementById('bundeslandlist');
 const landkreisDrop = document.getElementById('landkreislist');
+const casesElement = document.getElementById('cases');
+const deathsElement = document.getElementById('deaths')
 
 bundeslandField.placeholder = 'Select Bundesland';
 landkreisField.placeholder = 'Select Landkreis';
@@ -9,7 +11,11 @@ landkreisField.placeholder = 'Select Landkreis';
 let valueArrayBl = [];
 let valueArrayLk = [];
 
+let cases
+let deaths
+
 $.getJSON('api/2020-11-14/', function (data) {
+    cases = data
     let flag = true
     $.each(data, function (key, val) {
         if (!flag) {
@@ -70,7 +76,7 @@ $.getJSON('api/2020-11-14/', function (data) {
     // set clicked bl_li as selected and generate li's for lk dropdown
     dropdownArrayBl.forEach(item => {
         item.addEventListener('click', (evt) => {
-            bundeslandField.value = item.textContent;
+            bundeslandField.value = item.textContent
             landkreisField.value = ''
             $.getJSON('api/2020-11-14/' + item.textContent, function (data) {
                 $(landkreisDrop).empty()
@@ -102,7 +108,6 @@ $.getJSON('api/2020-11-14/', function (data) {
     })
 
     // auto complete
-
     bundeslandField.addEventListener('input', () => {
         bundeslandDrop.classList.add('open');
         let inputValue = bundeslandField.value.toLowerCase();
@@ -138,7 +143,14 @@ $.getJSON('api/2020-11-14/', function (data) {
             }
         }
     });
-});
+
+    // fill data fields
+    $.getJSON( 'api/_/', function() {} )
+    .done(function( data ) {
+        casesElement.innerHTML = data[Object.keys(data)[0]].All.cases
+        deathsElement.innerHTML = data[Object.keys(data)[0]].All.deaths
+    })
+})
 
 let subNav = document.getElementById('subNav')
 let dateRange = document.getElementById('DateRange')
@@ -155,4 +167,3 @@ dateRange.addEventListener("click", function() {
         inOrOut = true
     }
 })
-
