@@ -20,19 +20,14 @@ db.all(sqlGeo, [], (err, rows) => {
         throw err
     }
     for (let index = 0; index < rows.length; index++) {
-        if ((data.geo[rows[index].Bundesland] === undefined) || (data.geo[rows[index].Bundesland] + ' (' + rows[index].Prefix + ')' === undefined)) {
-            if ([rows[index].Prefix] != 'LK') {
-                data.geo[rows[index].Bundesland] = [rows[index].Landkreis + ' (' + [rows[index].Prefix] + ')']
-            } else {
-                data.geo[rows[index].Bundesland] = [rows[index].Landkreis]
-            }
-        } else {
-            if ([rows[index].Prefix] != 'LK') {
-                data.geo[rows[index].Bundesland].push(rows[index].Landkreis + ' (' + rows[index].Prefix + ')')
-            } else {
-                data.geo[rows[index].Bundesland].push(rows[index].Landkreis)
-            }
+        if (data.geo[rows[index].KrS.slice(0, 2)] === undefined) {
+            data.geo[rows[index].KrS.slice(0, 2)] = {Level2: {}, Name: rows[index].Bundesland}
         }
+        let name = rows[index].Landkreis
+        if (rows[index].Prefix != 'LK') {
+            name = rows[index].Landkreis + ' (' + rows[index].Prefix + ')'
+        }
+        data.geo[rows[index].KrS.slice(0, 2)].Level2[rows[index].KrS] = { Name:  name }
     }
 })
 

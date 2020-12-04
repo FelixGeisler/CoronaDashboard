@@ -8,18 +8,19 @@ const deathsElement = document.getElementById('deaths')
 bundeslandField.placeholder = 'Select Bundesland';
 landkreisField.placeholder = 'Select Landkreis';
 
-let valueArrayBl = [];
-let valueArrayLk = [];
+let valueArrayBl = []
+let valueArrayLk = []
 
-let cases
-let deaths
+let lvl1_location = 0
+let lvl2_location = 0
 
 $.getJSON('data/_/_', function (data) {
     $.each(data.geo, function (key, val) {
         item = document.createElement('li')                                                         // Create DropDown li's
-        item.appendChild(document.createTextNode(key));
+        item.id = 'li_' + key
+        item.appendChild(document.createTextNode(val.Name));
         bundeslandDrop.appendChild(item)                                                            // Append li to DropDown-List
-        valueArrayBl.push(key) 
+        valueArrayBl.push(val.Name)
     })
 }).done(function (n) {
     let dropdownArrayBl = [...document.querySelectorAll('ul#bundeslandlist.value-list li')];
@@ -70,33 +71,11 @@ $.getJSON('data/_/_', function (data) {
     // set clicked bl_li as selected and generate li's for lk dropdown
     dropdownArrayBl.forEach(item => {
         item.addEventListener('click', (evt) => {
-            bundeslandField.value = item.textContent
-            landkreisField.value = ''
-            $.getJSON('data/_/_/', function (data) {
-                $(landkreisDrop).empty()
-                valueArrayLk = []
-                flag = true
-                console.log()
-                $.each(data.geo[item.textContent], function (key, val) {
-                    lk_item = document.createElement('li')
-                    lk_item.appendChild(document.createTextNode(val));
-                    landkreisDrop.appendChild(lk_item)
-                    valueArrayLk.push(val) 
-                })
-                dropdownArrayLk = [...document.querySelectorAll('ul#landkreislist.value-list li')]
-                dropdownArrayLk.forEach(item => {
-                    item.addEventListener('click', (evt) => {
-                        landkreisField.value = item.textContent;
-                        dropdownArrayLk.forEach(landkreisDrop => {
-                            landkreisDrop.classList.add('closed');
-                        });
-                    });
-                })
-            })
-            dropdownArrayBl.forEach(bundeslandDrop => {
-                bundeslandDrop.classList.add('closed');
-            });
+            setLvl1Location(item.id.slice(3))
         });
+        dropdownArrayBl.forEach(bundeslandDrop => {
+            bundeslandDrop.classList.add('closed');
+        })
     })
 
     // auto complete
@@ -137,49 +116,52 @@ $.getJSON('data/_/_', function (data) {
     });
 
     // fill data fields
-    $.getJSON( 'api/_/', function() {} )
-    .done(function( data ) {
-        casesElement.innerHTML = data[Object.keys(data)[0]].All.cases
-        deathsElement.innerHTML = data[Object.keys(data)[0]].All.deaths
-    })
+    setDataFields('_', 'All', false)
 })
 
 let subNav = document.getElementById('subNav')
 let dateRange = document.getElementById('DateRange')
 let inOrOut = true
 
-function getLocation(id) {
-    let bls = document.getElementsByClassName('Bundesland')
-    for (let index = 0; index < bls.length; index++) {
-        bls[index].style.display = 'block'
-        
+function setDataFields(date, level1, level2) {
+    let url = 'api/' + date + '/' + level1 + '/'
+    if (level2) {
+        url += level2 + '/'
     }
-    document.getElementById(id).style.display = 'none'
+    $.getJSON( url, function() {} )
+    .done(function( data ) {
+        casesElement.innerHTML = data[Object.keys(data)[0]].cases
+        deathsElement.innerHTML = data[Object.keys(data)[0]].cases
+    })
+}
 
-    bundeslandField.value = id
-    landkreisField.value = ''
+function setLvl1Location(id) {
+    document.getElementById(lvl1_location).style.display = 'block'
+    document.getElementById(id).style.display = 'none'
+    lvl1_location = id
+
     $.getJSON('data/_/_/', function (data) {
+        bundeslandField.value = data.geo[id].Name
+        landkreisField.value = ''
         $(landkreisDrop).empty()
-        valueArrayLk = []
-        $.each(data.geo[id], function (key, val) {
+        valueArrayLk = []                                                                           // Empty Level2 DropDown Menu
+        $.each(data.geo[id].Level2, function (key, val) {
             lk_item = document.createElement('li')
-            lk_item.appendChild(document.createTextNode(val));
+            lk_item.id = 'li_' + key
+            lk_item.appendChild(document.createTextNode(val.Name));
             landkreisDrop.appendChild(lk_item)
-            valueArrayLk.push(val)   
+            valueArrayLk.push(val.Name) 
         })
         dropdownArrayLk = [...document.querySelectorAll('ul#landkreislist.value-list li')]
         dropdownArrayLk.forEach(item => {
             item.addEventListener('click', (evt) => {
-                landkreisField.value = item.textContent;
+                landkreisField.value = item.val;
                 dropdownArrayLk.forEach(landkreisDrop => {
                     landkreisDrop.classList.add('closed');
                 });
             });
         })
     })
-    dropdownArrayBl.forEach(bundeslandDrop => {
-        bundeslandDrop.classList.add('closed');
-    });
 }
 
 dateRange.addEventListener("click", function() {
