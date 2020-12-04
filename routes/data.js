@@ -31,7 +31,7 @@ db.all(sqlGeo, [], (err, rows) => {
     }
 })
 
-router.get('/data/:date/:place', function (req, res, next) {
+router.get('/data/:date/:location', function (req, res, next) {
     res.json(data)
 })
 

@@ -1,15 +1,19 @@
 const express = require('express')
+const { data } = require('jquery')
 const sqlite3 = require('sqlite3').verbose()
 const router = express.Router()
 
 const db = new sqlite3.Database('./database/db.sqlite')
 const sql = 'SELECT * FROM Data ORDER BY Date, Bundesland, Landkreis'
 
+let startDate
+let endDate
+
 db.all(sql, [], (err, rows) => {
     if (err) {
         throw err
     }
-    const data = {}
+    let data = {}
     for (let index = 0; index < rows.length; index++) {   
       const landkreis = rows[index].Landkreis.toString().replace(/\s+/g, '')
       if (!(rows[index].Date in data)) {
@@ -46,75 +50,67 @@ db.all(sql, [], (err, rows) => {
       bundesland.All.casesPer100k = bundesland.All.casesPerPopulation * 1000 
     }
 
-    router.get('/api/:date?/:bl?/:lk?', function (req, res, next) {
-        const dateParam = req.params.date
-        if (dateParam === undefined) {
-            res.json(data)
-        } else {
-            const blParam = req.params.bl
-            if (dateParam.includes('_')) {
-                startDate = dateParam.split('_')[0]
-                if (startDate) {
-                    startDate = new Date(startDate)
-                } else {
-                    startDate = new Date()
-                    startDate.setHours(1, 0, 0, 0)
-                }
-                endDate = dateParam.split('_')[1]
-                if (endDate) {
-                    switch (endDate.split('-').length) {
-                        case 1:
-                            endDate = new Date(endDate, 12, 0)
-                            break
-                        case 2:
-                            endDate = new Date(endDate.split('-')[0], endDate.split('-')[1] + 1, 0)
-                            break
-                        default:
-                            endDate = new Date(endDate)
-                            break
-                    }
-                } else {
-                    endDate = new Date()
-                    endDate.setHours(1, 0, 0, 0)                                                                        // Range, but no endDate given -> endDate = today()
-                }
-                newData = {}
-                for (const item in data) {
-                    if (new Date(item) >= startDate && new Date(item) <= endDate) {
-                        newData[item] = data[item]
-                    }
-                }
-                if (blParam === undefined) {
-                    res.json(newData)
-                } else {
-                    const lkParam = req.params.lk
-                    if (lkParam === undefined) {
-                        const newDataBl = {}
-                        for (const item in newData) {
-                            newDataBl[item] = newData[item][blParam]
-                        }
-                        res.json(newDataBl)
-                    } else {
-                        const newDataLk = {}
-                        for (const item in newData) {
-                            newDataLk[item] = newData[item][blParam][lkParam]
-                        }
-                        res.json(newDataLk)
-                    }
-                }
-            } else {
-                if (blParam === undefined) {
-                    res.json(data[dateParam])
-                } else {
-                    const lkParam = req.params.lk
-                    if (lkParam === undefined) {
-                        res.json(data[dateParam][blParam])
-                    } else {
-                        res.json(data[dateParam][blParam][lkParam])
-                    }
+    router.get('/api/:date?/:level1?/:level2?', function (req, res, next) {
+        let date_dict = {}
+        let level1_dict = {}
+        let level2_dict = {}
+        if (req.params.date !== undefined) {
+            getDate(req.params.date)
+            for (const item in data) {
+                if (new Date(item) >= startDate && new Date(item) <= endDate) {
+                    date_dict[item] = data[item]
                 }
             }
+            if (req.params.level1 !== undefined) {
+                for (const item in date_dict) {
+                    level1_dict[item] = date_dict[item][req.params.level1]
+                }
+                if (req.params.level2 !== undefined) {
+                    for (const item in date_dict) {
+                        level2_dict[item] = date_dict[item][req.params.level1][req.params.level2]
+                    }
+                    data = level2_dict
+                } else {
+                    data = level1_dict
+                }
+            } else {
+                data = date_dict
+            }
         }
+        res.json(data)
     })
 })
+
+function getDate(date) {
+    if (date.includes('_')) {
+        if (date == '_') {
+            startDate = new Date(new Date().setHours(1, 0, 0, 0))
+        } else {
+            startDate = new Date(Date.parse(date.split('_')[0]))
+        }
+        endDateList = date.split('_')[1].split('-')
+        if (endDateList[0] == '') {
+            endDate = new Date(new Date().setHours(1, 0, 0, 0))
+        } else {
+            switch (endDateList.length) {
+                case 1:
+                    endDate = new Date(endDateList[0], 12, 0)
+                    break
+                case 2:
+                    endDate = new Date(endDateList[0], endDateList[1], 0)
+                    break
+                case 3:
+                    endDate = new Date(endDateList[0], (parseInt(endDateList[1]) - 1), endDateList[2])
+                    break
+                default:
+                    break
+            }
+        }
+        endDate = new Date(endDate.setHours(1, 0, 0, 0))
+    } else {
+        startDate = new Date(Date.parse(date))
+        endDate = startDate
+    }
+}
 
 module.exports = router
