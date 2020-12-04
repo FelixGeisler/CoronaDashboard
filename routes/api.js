@@ -3,54 +3,56 @@ const { data } = require('jquery')
 const sqlite3 = require('sqlite3').verbose()
 const router = express.Router()
 
-const db = new sqlite3.Database('./database/db.sqlite')
-const sql = 'SELECT * FROM Data ORDER BY Date, Bundesland, Landkreis'
+var startDate
+var endDate
 
-let startDate
-let endDate
+router.get('/api/:date?/:level1?/:level2?', function (req, res, next) {
 
-db.all(sql, [], (err, rows) => {
-    if (err) {
-        throw err
-    }
+    const db = new sqlite3.Database('./database/db.sqlite')
+    const sql = 'SELECT * FROM Data ORDER BY Date, Bundesland, Landkreis'
+    
     let data = {}
-    for (let index = 0; index < rows.length; index++) {   
-      const landkreis = rows[index].Landkreis.toString().replace(/\s+/g, '')
-      if (!(rows[index].Date in data)) {
-        data[rows[index].Date] = {'All': { cases: 0, casesPer100k: 0, casesPerPopulation: 0, cases7Per100k: 0, cases7BlPer100k: 0, deaths: 0, deathRate: 0, inhabitants: 0 }}
-        data[rows[index].Date][rows[index].Bundesland] = {'All': { cases: 0, casesPer100k: 0, casesPerPopulation: 0, cases7Per100k: 0, cases7BlPer100k: 0, deaths: 0, deathRate: 0, inhabitants: 0 }}
-      } else {
-        if (!(rows[index].Bundesland in data[rows[index].Date])) {
-            data[rows[index].Date][rows[index].Bundesland] = {'All': { cases: 0, casesPer100k: 0, casesPerPopulation: 0, cases7Per100k: 0, cases7BlPer100k: 0, deaths: 0, deathRate: 0, inhabitants: 0 }}
-        } else {
-            if (!(rows[index].Landkreis in data[rows[index].Date][rows[index].Bundesland])) {
-            }
-        }
-      }
-      const date = data[rows[index].Date]
-      const bundesland = date[rows[index].Bundesland]
-      bundesland[landkreis] = {}
-      bundesland[landkreis]['cases'] = rows[index].Cases
-      bundesland[landkreis]['casesPer100k'] = rows[index].CasesPer100k
-      bundesland[landkreis]['casesPerPopulation'] = rows[index].CasesPerPopulation
-      bundesland[landkreis]['cases7Per100k'] = rows[index].Cases7Per100k
-      bundesland[landkreis]['cases7BlPer100k'] = rows[index].Cases7BlPer100k
-      bundesland[landkreis]['deaths'] = rows[index].Deaths
-      bundesland[landkreis]['deathRate'] = rows[index].DeathRate
-      bundesland[landkreis]['inhabitants'] = rows[index].Inhabitants
-      date.All.cases += rows[index].Cases
-      date.All.deaths += rows[index].Deaths
-      date.All.inhabitants += rows[index].Inhabitants
-      date.All.casesPerPopulation = date.All.cases / date.All.inhabitants * 100
-      date.All.casesPer100k = date.All.casesPerPopulation * 1000
-      bundesland.All.cases += rows[index].Cases
-      bundesland.All.deaths += rows[index].Deaths
-      bundesland.All.inhabitants += rows[index].Inhabitants
-      bundesland.All.casesPerPopulation = bundesland.All.cases / bundesland.All.inhabitants * 100
-      bundesland.All.casesPer100k = bundesland.All.casesPerPopulation * 1000 
-    }
 
-    router.get('/api/:date?/:level1?/:level2?', function (req, res, next) {
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            throw err
+        }
+        for (let index = 0; index < rows.length; index++) {   
+          const landkreis = rows[index].Landkreis.toString().replace(/\s+/g, '')
+          if (!(rows[index].Date in data)) {
+            data[rows[index].Date] = {'All': { cases: 0, casesPer100k: 0, casesPerPopulation: 0, cases7Per100k: 0, cases7BlPer100k: 0, deaths: 0, deathRate: 0, inhabitants: 0 }}
+            data[rows[index].Date][rows[index].Bundesland] = {'All': { cases: 0, casesPer100k: 0, casesPerPopulation: 0, cases7Per100k: 0, cases7BlPer100k: 0, deaths: 0, deathRate: 0, inhabitants: 0 }}
+          } else {
+            if (!(rows[index].Bundesland in data[rows[index].Date])) {
+                data[rows[index].Date][rows[index].Bundesland] = {'All': { cases: 0, casesPer100k: 0, casesPerPopulation: 0, cases7Per100k: 0, cases7BlPer100k: 0, deaths: 0, deathRate: 0, inhabitants: 0 }}
+            } else {
+                if (!(rows[index].Landkreis in data[rows[index].Date][rows[index].Bundesland])) {
+                }
+            }
+          }
+          const date = data[rows[index].Date]
+          const bundesland = date[rows[index].Bundesland]
+          bundesland[landkreis] = {}
+          bundesland[landkreis]['cases'] = rows[index].Cases
+          bundesland[landkreis]['casesPer100k'] = rows[index].CasesPer100k
+          bundesland[landkreis]['casesPerPopulation'] = rows[index].CasesPerPopulation
+          bundesland[landkreis]['cases7Per100k'] = rows[index].Cases7Per100k
+          bundesland[landkreis]['cases7BlPer100k'] = rows[index].Cases7BlPer100k
+          bundesland[landkreis]['deaths'] = rows[index].Deaths
+          bundesland[landkreis]['deathRate'] = rows[index].DeathRate
+          bundesland[landkreis]['inhabitants'] = rows[index].Inhabitants
+          date.All.cases += rows[index].Cases
+          date.All.deaths += rows[index].Deaths
+          date.All.inhabitants += rows[index].Inhabitants
+          date.All.casesPerPopulation = date.All.cases / date.All.inhabitants * 100
+          date.All.casesPer100k = date.All.casesPerPopulation * 1000
+          bundesland.All.cases += rows[index].Cases
+          bundesland.All.deaths += rows[index].Deaths
+          bundesland.All.inhabitants += rows[index].Inhabitants
+          bundesland.All.casesPerPopulation = bundesland.All.cases / bundesland.All.inhabitants * 100
+          bundesland.All.casesPer100k = bundesland.All.casesPerPopulation * 1000 
+        }
+
         let date_dict = {}
         let level1_dict = {}
         let level2_dict = {}
@@ -80,6 +82,7 @@ db.all(sql, [], (err, rows) => {
         res.json(data)
     })
 })
+
 
 function getDate(date) {
     if (date.includes('_')) {

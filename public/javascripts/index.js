@@ -11,8 +11,9 @@ landkreisField.placeholder = 'Select Landkreis';
 let valueArrayBl = []
 let valueArrayLk = []
 
-let lvl1_location = 0
-let lvl2_location = 0
+var loc = 0
+let startDate = new Date()
+let endDate = new Date()
 
 $.getJSON('data/_/_', function (data) {
     $.each(data.geo, function (key, val) {
@@ -128,19 +129,20 @@ function setDataFields(date, level1, level2) {
     if (level2) {
         url += level2 + '/'
     }
-    $.getJSON( url, function() {} )
+    $.getJSON(url, function() {} )
     .done(function( data ) {
         casesElement.innerHTML = data[Object.keys(data)[0]].cases
-        deathsElement.innerHTML = data[Object.keys(data)[0]].cases
+        deathsElement.innerHTML = data[Object.keys(data)[0]].deaths
     })
 }
 
 function setLvl1Location(id) {
-    document.getElementById(lvl1_location).style.display = 'block'
+    console.log(loc)
+    let dateString = startDate.getFullYear() + '-' + startDate.getMonth() + '-' + startDate.getDate() + '_' + endDate.getFullYear() + '-' + endDate.getMonth()+ '-' + endDate.getDate()
+    document.getElementById(loc).style.display = 'block'
     document.getElementById(id).style.display = 'none'
-    lvl1_location = id
-
-    $.getJSON('data/_/_/', function (data) {
+    loc = id
+    $.getJSON('data/' + dateString + '/' + loc + '/', function (data) {
         bundeslandField.value = data.geo[id].Name
         landkreisField.value = ''
         $(landkreisDrop).empty()
