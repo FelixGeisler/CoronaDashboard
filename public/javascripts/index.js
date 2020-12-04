@@ -14,17 +14,12 @@ let valueArrayLk = [];
 let cases
 let deaths
 
-$.getJSON('api/2020-11-14/', function (data) {
-    cases = data
-    let flag = true
-    $.each(data, function (key, val) {
-        if (!flag) {
-            item = document.createElement('li')
-            item.appendChild(document.createTextNode(key));
-            bundeslandDrop.appendChild(item)
-            valueArrayBl.push(key) 
-        }
-        flag = false  
+$.getJSON('data/_/_', function (data) {
+    $.each(data.geo, function (key, val) {
+        item = document.createElement('li')                                                         // Create DropDown li's
+        item.appendChild(document.createTextNode(key));
+        bundeslandDrop.appendChild(item)                                                            // Append li to DropDown-List
+        valueArrayBl.push(key) 
     })
 }).done(function (n) {
     let dropdownArrayBl = [...document.querySelectorAll('ul#bundeslandlist.value-list li')];
@@ -55,7 +50,6 @@ $.getJSON('api/2020-11-14/', function (data) {
         const isInputLk = landkreisField.contains(evt.target);
         if (!isDropdownBl && !isInputBl) {
             bundeslandDrop.classList.remove('open');
-            
         }
         if (!isDropdownLk && !isInputLk) {
             landkreisDrop.classList.remove('open');
@@ -78,18 +72,16 @@ $.getJSON('api/2020-11-14/', function (data) {
         item.addEventListener('click', (evt) => {
             bundeslandField.value = item.textContent
             landkreisField.value = ''
-            $.getJSON('api/2020-11-14/' + item.textContent, function (data) {
+            $.getJSON('data/_/_/', function (data) {
                 $(landkreisDrop).empty()
                 valueArrayLk = []
                 flag = true
-                $.each(data, function (key, val) {
-                    if (!flag) {
-                        lk_item = document.createElement('li')
-                        lk_item.appendChild(document.createTextNode(key));
-                        landkreisDrop.appendChild(lk_item)
-                        valueArrayLk.push(key)   
-                    }
-                    flag = false
+                console.log()
+                $.each(data.geo[item.textContent], function (key, val) {
+                    lk_item = document.createElement('li')
+                    lk_item.appendChild(document.createTextNode(val));
+                    landkreisDrop.appendChild(lk_item)
+                    valueArrayLk.push(val) 
                 })
                 dropdownArrayLk = [...document.querySelectorAll('ul#landkreislist.value-list li')]
                 dropdownArrayLk.forEach(item => {
@@ -166,18 +158,14 @@ function getLocation(id) {
 
     bundeslandField.value = id
     landkreisField.value = ''
-    $.getJSON('api/2020-11-14/' + id, function (data) {
+    $.getJSON('data/_/_/', function (data) {
         $(landkreisDrop).empty()
         valueArrayLk = []
-        flag = true
-        $.each(data, function (key, val) {
-            if (!flag) {
-                lk_item = document.createElement('li')
-                lk_item.appendChild(document.createTextNode(key));
-                landkreisDrop.appendChild(lk_item)
-                valueArrayLk.push(key)   
-            }
-            flag = false
+        $.each(data.geo[id], function (key, val) {
+            lk_item = document.createElement('li')
+            lk_item.appendChild(document.createTextNode(val));
+            landkreisDrop.appendChild(lk_item)
+            valueArrayLk.push(val)   
         })
         dropdownArrayLk = [...document.querySelectorAll('ul#landkreislist.value-list li')]
         dropdownArrayLk.forEach(item => {
