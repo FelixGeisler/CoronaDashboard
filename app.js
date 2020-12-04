@@ -26,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', router)
 app.get('/api/:date?/:bl?/:lk?', require(path.join(__dirname, '/routes/api')))
+app.get('/data/:date/:place', require(path.join(__dirname, '/routes/data')))
 app.get('/globe', require(path.join(__dirname, '/routes/globe')))
 app.get('/table', require(path.join(__dirname, '/routes/table')))
 

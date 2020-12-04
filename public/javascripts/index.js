@@ -156,6 +156,44 @@ let subNav = document.getElementById('subNav')
 let dateRange = document.getElementById('DateRange')
 let inOrOut = true
 
+function getLocation(id) {
+    let bls = document.getElementsByClassName('Bundesland')
+    for (let index = 0; index < bls.length; index++) {
+        bls[index].style.display = 'block'
+        
+    }
+    document.getElementById(id).style.display = 'none'
+
+    bundeslandField.value = id
+    landkreisField.value = ''
+    $.getJSON('api/2020-11-14/' + id, function (data) {
+        $(landkreisDrop).empty()
+        valueArrayLk = []
+        flag = true
+        $.each(data, function (key, val) {
+            if (!flag) {
+                lk_item = document.createElement('li')
+                lk_item.appendChild(document.createTextNode(key));
+                landkreisDrop.appendChild(lk_item)
+                valueArrayLk.push(key)   
+            }
+            flag = false
+        })
+        dropdownArrayLk = [...document.querySelectorAll('ul#landkreislist.value-list li')]
+        dropdownArrayLk.forEach(item => {
+            item.addEventListener('click', (evt) => {
+                landkreisField.value = item.textContent;
+                dropdownArrayLk.forEach(landkreisDrop => {
+                    landkreisDrop.classList.add('closed');
+                });
+            });
+        })
+    })
+    dropdownArrayBl.forEach(bundeslandDrop => {
+        bundeslandDrop.classList.add('closed');
+    });
+}
+
 dateRange.addEventListener("click", function() {
     if (inOrOut) {
         subNav.style.transform = "translateY(4rem)"

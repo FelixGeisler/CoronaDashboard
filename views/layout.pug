@@ -2,8 +2,9 @@ doctype html
 html(lang='en')
   head
     meta(charset='utf-8')
-    link(rel='stylesheet', href='/stylesheets/style.css')
-    link(rel='stylesheet', href='/stylesheets/modules/bootstrap.css')
+    block stylesheets
+      link(rel='stylesheet', href='/stylesheets/style.css')
+      link(rel='stylesheet', href='/stylesheets/modules/bootstrap.css')
     title= 'Corona Dashboard'
   body
     nav.navbar.navbar-dark.navbar-expand-lg
@@ -14,7 +15,6 @@ html(lang='en')
     
     #subNav
       
-
     #DateRange
       svg
         ellipse(rx='32' ry='40' cx='32' cy='40' fill='#ff9412')
@@ -61,6 +61,6 @@ html(lang='en')
         ellipse(cx='50%' cy='120%' rx='40%' ry='80%')
       .bottom
 
-    script(src='/javascripts/modules/jquery.js')
-    script(src='/javascripts/modules/bootstrap.bundle.js')
-    script(src='/javascripts/index.js')
+    block scripts
+      script(src='/javascripts/modules/jquery.js')
+      script(src='/javascripts/modules/bootstrap.bundle.js')

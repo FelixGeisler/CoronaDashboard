@@ -3,7 +3,7 @@ const sqlite3 = require('sqlite3').verbose()
 const router = express.Router()
 
 const db = new sqlite3.Database('./database/db.sqlite')
-const sql = 'SELECT * FROM Landkreis ORDER BY Date, Bundesland, Landkreis'
+const sql = 'SELECT * FROM Data ORDER BY Date, Bundesland, Landkreis'
 
 db.all(sql, [], (err, rows) => {
     if (err) {
