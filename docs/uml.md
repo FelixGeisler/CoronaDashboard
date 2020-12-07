@@ -1,3 +1,30 @@
+
+# Use-Case-Diagram
+
+```plantuml
+left to right direction
+skinparam packagestyle rectangle
+actor User as U
+Server as S
+
+rectangle "Corona Dashboard" #azure {
+    U -- (Show Table)
+    (Show Table) <.. (Query DB): <<extend>>
+    U -- (Show Diagrams)
+    
+    (Show Diagrams) <.. (Query DB): <<extend>>
+    (Query DB) -- S
+    U -- (Show API)
+    (Show API) <.. (Query DB): <<extend>>
+
+    S -- (Write to DB)
+    (Write to DB) ..> (Query API): <<include>>
+    (Query API) -- S
+}
+```
+
+# Sequence-Diagram
+
 ```plantuml
 box Client #azure
 participant Client
