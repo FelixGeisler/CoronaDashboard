@@ -163,6 +163,7 @@ function setLvl1Location(id) {
                 });
             });
         })
+        console.log('data/' + dateString + '/' + loc + '/')
     })
 }
 

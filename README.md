@@ -23,3 +23,5 @@ To filter the data by a Bundesland specify it in the link: e.g. `/api/yyyy-mm-dd
 
 ### Filter by Landkreis
 To filter the data by a Landkreis specify it in the link: e.g. `/api/yyyy-mm-dd/Baden-Württemberg/LKZollernalbkreis`
+
+## 

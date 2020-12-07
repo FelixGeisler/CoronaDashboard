@@ -32,7 +32,22 @@ db.all(sqlGeo, [], (err, rows) => {
 })
 
 router.get('/data/:date/:location', function (req, res, next) {
-    res.json(data)
+    let date_dict
+    let level1_dict
+    let level2_dict
+    for (const item in data) {
+        if (new Date(item) >= startDate && new Date(item) <= endDate) {
+            date_dict[item] = data[item]
+        }
+    }
+    for (const item in date_dict) {
+        level1_dict[item] = date_dict[item][req.params.level1]
+    }
+    for (const item in date_dict) {
+        level2_dict[item] = date_dict[item][req.params.level1][req.params.level2]
+    }
+    res.json(level2_dict)
 })
+
 
 module.exports = router
