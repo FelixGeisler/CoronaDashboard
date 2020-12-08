@@ -4,10 +4,14 @@
 ```plantuml
 left to right direction
 skinparam packagestyle rectangle
-actor User as U
 Server as S
+actor User as U
 
 rectangle "Corona Dashboard" #azure {
+    S -- (Write to DB)
+    (Write to DB) <.. (Query API): <<include>>
+    (Query API) -- S
+    
     U -- (Show Table)
     (Show Table) <.. (Query DB): <<extend>>
     U -- (Show Diagrams)
@@ -16,10 +20,6 @@ rectangle "Corona Dashboard" #azure {
     (Query DB) -- S
     U -- (Show API)
     (Show API) <.. (Query DB): <<extend>>
-
-    S -- (Write to DB)
-    (Write to DB) ..> (Query API): <<include>>
-    (Query API) -- S
 }
 ```
 
@@ -36,16 +36,16 @@ participant Database
 end box
 
 box APIs #azure
-participant RKI_API
+participant "RKI API"
 end box
 
 Group #LightBlue Server-API Communication
-WebServer -> RKI_API: GET
+WebServer -> "RKI API": GET
 activate WebServer
 activate Client
-activate RKI_API
-RKI_API --> WebServer: SEND
-deactivate RKI_API
+activate "RKI API"
+"RKI API" --> WebServer: SEND
+deactivate "RKI API"
 activate Database
 WebServer -> Database: REPLACE INTO
 end
@@ -55,9 +55,10 @@ activate Client
 Client -> WebServer: GET
 WebServer -> Database: SELECT
 Database --> WebServer: Data
+WebServer -> WebServer: Calculations
 deactivate Database 
 WebServer --> Client: SEND
-deactivate Client
 deactivate WebServer
+Client -> Client: Visualize
 end
 ```
