@@ -56,7 +56,7 @@ Server queries RKI-API regularly and stores the data with the current date in th
 <img src='http://www.plantuml.com/plantuml/png/RP3DReCm48JlVefLSkO5E5H92OfGKHebg3qlPDLQCZy2Ewhoz3MuNGpn9O7PcUMRtGqQUsrg9Shs1n8bgT6mnOVfINHs8YlPePNSH51p0siKa_jA_PtwaFkJIZTSg0VKME90ootxSpQ4TcmkRzautCpsOz-Q3hQv_FhMhyhG7q5aNP2qTMqQMQ6MRICO0AANULCCnxGGM6bvHqqU9Kkk9hzx4Fm4aLt9qHYkwUaWRXI8iCJ5VInMOxYavtoVf92TYlUnRQ2f0ujSUbLsJU_-mCTqpSEVjmtoD2d4lx0kEEhBg3TCK5L6JHo3VmLUvYTjrB4zNurTCprxF-HWKCa7JRVPsHzJgry0'>
 </div>
 
-- <b>Server-API Communication</b>:
+- <b>Server-API Communication:</b>
     Server queries RKI API regularly and stores data in db. We use (Current_Date, Admin_Level_2) as Primary Key. If Key already exists, entry gets overwritten (Replace Into).
-- <b>Client-Server Communication</b>
+- <b>Client-Server Communication:</b>
     Client sends GET-Request and defines location and time-range. Server selects necessary data from the db and extends them with some calculated data. Server sends data to Client. Client visualizes data.
