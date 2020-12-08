@@ -53,7 +53,7 @@ Server queries RKI-API regularly and stores the data with the current date in th
 ### Sequence-Diagram
 
 <div align='center'>
-<img src='http://www.plantuml.com/plantuml/png/RP3DReCm48JlVefLSkO5E5H92OfGKHebg3qlPDLQCZy2Ewhoz3MuNGpn9O7PcUMRtGqQUsrg9Shs1n8bgT6mnOVfINHs8YlPePNSH51p0siKa_jA_PtwaFkJIZTSg0VKME90ootxSpQ4TcmkRzautCpsOz-Q3hQv_FhMhyhG7q5aNP2qTMqQMQ6MRICO0AANULCCnxGGM6bvHqqU9Kkk9hzx4Fm4aLt9qHYkwUaWRXI8iCJ5VInMOxYavtoVf92TYlUnRQ2f0ujSUbLsJU_-mCTqpSEVjmtoD2d4lx0kEEhBg3TCK5L6JHo3VmLUvYTjrB4zNurTCprxF-HWKCa7JRVPsHzJgry0'>
+<img src='http://www.plantuml.com/plantuml/png/RLBBReCm4BpxArR9cH_WK2KbA495QPIWzhoGLMl9F0HsLENhQt2x1k8RciTuPiLkqDXhKojHjZ-GA4cDXYq-J4-YiuoiP8SMSeoWvWPMA2RrbVexzI7r9vMENA07r5ZYGCkK_JaRGXcRorisaXilF_QjwM2Rowzl_QeC_JM8h0gIjgvD8olKicq45u3enIV5S4mBWPMMTzJaMth8FyfV4Da8biPmJKy7SQE0XI4UEg_1Q0oNz9planIoK_4-hWiiS_UEd7irpd4mhxLQvXJXvyS5UPeKuXzO3npnfNL69gWgewOUm_mA73PtMgjhydmrLlarhFsGWq4b7zEFuaqyQsTXKwjV'>
 </div>
 
 - <b>Server-API Communication:</b>
