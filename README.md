@@ -44,10 +44,8 @@ To filter the data by a Admin_Level_2 (e.g. Landkreis) specify it in the link: e
 
 - <b>Use-Case Query API (RKI)</b>:
 Server queries RKI-API regularly and stores the data with the current date in the db.
-<br>
 - <b>Use-Case Use API (Own)</b>:
     User defines location and time-range. Server queries necessary data from the db and sends them to the user as JSON.
-<br>
 - <b>Use-Case Show Table/Diagrams</b>:
     User defines location and time-range. Server queries necessary data from the db and sends them to the user as JSON. Data visualization via chart.js/d3.js/tabulator.js on client side.
 <br>
@@ -60,6 +58,5 @@ Server queries RKI-API regularly and stores the data with the current date in th
 
 - <b>Server-API Communication</b>:
     Server queries RKI API regularly and stores data in db. We use (Current_Date, Admin_Level_2) as Primary Key. If Key already exists, entry gets overwritten (Replace Into).
-<br>
 - <b>Client-Server Communication</b>
     Client sends GET-Request and defines location and time-range. Server selects necessary data from the db and extends them with some calculated data. Server sends data to Client. Client visualizes data.
