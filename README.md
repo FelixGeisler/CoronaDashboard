@@ -39,21 +39,19 @@ To filter the data by a Admin_Level_2 (e.g. Landkreis) specify it in the link: e
 ### Use-Case-Diagram
 
 <div align='center'>
-<img src='http://www.plantuml.com/plantuml/png/XO_1JeD048Rl-nH_wWKExGCOqbJbuas3nFCKHjXqsMrc5xKQtrsd6e6BNWZ_zq--cTt5H9B6mHd7JmafG6pN9xHMk4asU1CFrXz9QC2HcWDr7DF9CRGctpas5Sip2oYYCjIa8AZZTwwD-Ht3wYP8y8IIOhyF9EqA5_Gs2kFT0425zHhPezZ4UaPvdIjU4XIR3RBxaUM4gxlR_195ONtZnfQtMnsVb-ghpl3ygJLdLHzUy41xnp_w2Spjkapb_9hOj-fU6afBdT0Gyyc_BFwLJTLqvso1Fa3P5FyqVfZTryyuk4y0'/>
+<img src='http://www.plantuml.com/plantuml/png/ROknJiD038PtFyMlii3GFW53WIniI4V4x2OcEVNkNFaS423U7P56KOLOBFd_lczVdSsdd2Z9gyCL5eVHqKUJpgCMgiTOJcoSSUBko8DK_qY2NynbI491x4qCN168ErT3Myz_IxHgs3oeQM4qNCU3ilKRNF7dP88l0e20xHRNBnPTu8hc_cQUvzFEB8pwZcS-93cZom6tknt2lqKJUJ3ETOqkjwNxszmzFIxw-YxcD-sbz5DEFm00'/>
 </div>
 
-- <b>Use-Case Query API (RKI)</b>:
+- <b>Use-Case Write to DB</b>:
 Server queries RKI-API regularly and stores the data with the current date in the db.
-- <b>Use-Case Query API (Own)</b>:
-    User defines location and time-range. Server queries necessary data from the db and sends them to the user as JSON.
-- <b>Use-Case Show Table/Diagrams</b>:
-    User defines location and time-range. Server queries necessary data from the db and sends them to the user as JSON. Data visualization via chart.js/d3.js/tabulator.js on client side.
+- <b>Use-Case Show API/Table/Diagrams</b>:
+User defines location and time-range. Server queries necessary data from the db and sends them to the user as JSON. Data visualization via chart.js/d3.js/tabulator.js on client side in case of Show Table/Diagrams.
 <br>
 
 ### Sequence-Diagram
 
 <div align='center'>
-<img src='http://www.plantuml.com/plantuml/png/RLBBReCm4BpxArR9cH_WK2KbA495QPIWzhoGLMl9F0HsLENhQt2x1k8RciTuPiLkqDXhKojHjZ-GA4cDXYq-J4-YiuoiP8SMSeoWvWPMA2RrbVexzI7r9vMENA07r5ZYGCkK_JaRGXcRorisaXilF_QjwM2Rowzl_QeC_JM8h0gIjgvD8olKicq45u3enIV5S4mBWPMMTzJaMth8FyfV4Da8biPmJKy7SQE0XI4UEg_1Q0oNz9planIoK_4-hWiiS_UEd7irpd4mhxLQvXJXvyS5UPeKuXzO3npnfNL69gWgewOUm_mA73PtMgjhydmrLlarhFsGWq4b7zEFuaqyQsTXKwjV'>
+<img src='http://www.plantuml.com/plantuml/png/RL5DQm8n4BtdLmnwbhtleLeLHDf3qL8llSokWmRYPic7BVxw3gQE2UIoB6_UUtblPk43kX0lHdNs5rP6qn1WYhVeI8qyqRqUaQ4qKJGSWOdgpjwJkvAhiG_KfM61hZ5WXvvAbzUFhQzvJ7PlM-3Xv4dVE1j7cBxhqpaiJIGuE1q8WeNrKicRC7jvYblOK53O1tr5fWf9eEmT-OCPMmYrXJqdK4UgI0IIRdaCGLlOqMYm9z13iBcLq3EmM5IbzVviV-0JEqFDMkF9uSKtd4RzNw_CplMXER9Xq_ANvarhR8z1ss7UIFp7UUlXkR-XFjrFFT3QZX93G2WPApHzDFUdVQqjv4gMfaoPStrlqbe4Nzf7DFgMhB-7oghae4Nz1SFnOlu0'>
 </div>
 
 - <b>Server-API Communication:</b>
