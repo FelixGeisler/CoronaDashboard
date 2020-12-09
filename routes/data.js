@@ -5,7 +5,7 @@ const router = express.Router()
 const db = new sqlite3.Database('./database/db.sqlite')
 const sqlData = 'SELECT * FROM Data ORDER BY Date, Bundesland, Landkreis'
 const sqlGeo = 'SELECT * FROM GEO ORDER BY KRs'
-
+/*
 let data = {'geo': {}}
 
 db.all(sqlData, [], (err, rows) => {
@@ -48,6 +48,6 @@ router.get('/data/:date/:location', function (req, res, next) {
     }
     res.json(level2_dict)
 })
-
+*/
 
 module.exports = router
