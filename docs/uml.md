@@ -9,17 +9,15 @@ actor User as U
 
 rectangle "Corona Dashboard" #azure {
     S -- (Write to DB)
-    (Write to DB) <.. (Query API): <<include>>
-    (Query API) -- S
     
     U -- (Show Table)
-    (Show Table) <.. (Query DB): <<extend>>
-    U -- (Show Diagrams)
+    (Show Table) <.. S
     
-    (Show Diagrams) <.. (Query DB): <<extend>>
-    (Query DB) -- S
+    U -- (Show Diagrams)
+    (Show Diagrams) <.. S
+
     U -- (Show API)
-    (Show API) <.. (Query DB): <<extend>>
+    (Show API) <.. S
 }
 ```
 
@@ -39,26 +37,28 @@ box APIs #azure
 participant "RKI API"
 end box
 
-Group #LightBlue Server-API Communication
-WebServer -> "RKI API": GET
+Group #LightBlue Write to DB
+WebServer -> "RKI API": Get
 activate WebServer
-activate Client
 activate "RKI API"
-"RKI API" --> WebServer: SEND
+"RKI API" --> WebServer: Send
 deactivate "RKI API"
 activate Database
-WebServer -> Database: REPLACE INTO
+WebServer -> Database: Replace into
+deactivate WebServer
+deactivate Database
 end
 
-Group #LightBlue Client-Server Communication
+Group #LightBlue Show Table/Diagrams/API
+Client -> WebServer: Get /data/:date?/:location?/
 activate Client
-Client -> WebServer: GET
-WebServer -> Database: SELECT
-Database --> WebServer: Data
+WebServer -> Database: Select Data
+Database --> WebServer: Send Data
 WebServer -> WebServer: Calculations
 deactivate Database 
-WebServer --> Client: SEND
+WebServer --> Client: Send Data
 deactivate WebServer
-Client -> Client: Visualize
+Client -> Client: Visualize Data\nTable/Diagrams/API
 end
+deactivate Client
 ```

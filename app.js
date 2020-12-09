@@ -50,7 +50,6 @@ cron.schedule('0 * * * *', function () {
   console.log('Running cron job...')
   database.runDB()
   // TODO: catch errors.
-  // TODO: check
 })
 
 module.exports = app
