@@ -14,7 +14,7 @@ module.exports = {
         console.log('Connected to the SQLite database.')
     
         // Update db Data
-        https.get('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=OBJECTID,cases,deaths&returnGeometry=false&outSR=4326&f=json', (resp) => {
+        https.get('https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=OBJECTID,SN_V1,EWZ,cases,deaths&returnGeometry=false&orderByFields=OBJECTID&outSR=&f=json', (resp) => {
     
           let data = ''
           console.log('Status Code: ' + resp.statusCode)
@@ -28,12 +28,13 @@ module.exports = {
           resp.on('end', () => {
             const dataLk = JSON.parse(data).features
             for (let i = 0; i < dataLk.length; i++) {
-              db.run('REPLACE INTO CoronaData (Date, Level3_ID, Cases, Deaths) VALUES(?, ?, ?, ?)',
+              db.run('REPLACE INTO CoronaData (Date, Level3_ID, Cases, Deaths, Population) VALUES(?, ?, ?, ?, ?)',
                 [
                   new Date().toISOString().slice(0, 10),
                   dataLk[i].attributes.OBJECTID,
                   dataLk[i].attributes.cases,
-                  dataLk[i].attributes.deaths
+                  dataLk[i].attributes.deaths,
+                  dataLk[i].attributes.EWZ
                 ], function (err) {
                   if (err) {
                     return console.log(err.message)

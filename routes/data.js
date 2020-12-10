@@ -1,53 +1,52 @@
 const express = require('express')
+const { data } = require('jquery')
 const sqlite3 = require('sqlite3').verbose()
 const router = express.Router()
 
 const db = new sqlite3.Database('./database/db.sqlite')
-const sqlData = 'SELECT * FROM Data ORDER BY Date, Bundesland, Landkreis'
-const sqlGeo = 'SELECT * FROM GEO ORDER BY KRs'
-/*
-let data = {'geo': {}}
 
-db.all(sqlData, [], (err, rows) => {
-    if (err) {
-        throw err
-    }
-    const data = {}
+router.get('/data/geo/level2/:level1/', function (req, res, next) {
+    var data = {}
+    sqlString = 'SELECT Level2_ID, Level2_Name FROM Level2 WHERE Level1_ID = ' + req.params.level1 + ' ORDER BY Level2_Name;'
+    db.all(sqlString, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data[rows[index].Level2_ID] = rows[index].Level2_Name
+        }
+        res.json(data)
+    })
 })
 
-db.all(sqlGeo, [], (err, rows) => {
-    if (err) {
-        throw err
-    }
-    for (let index = 0; index < rows.length; index++) {
-        if (data.geo[rows[index].KrS.slice(0, 2)] === undefined) {
-            data.geo[rows[index].KrS.slice(0, 2)] = {Level2: {}, Name: rows[index].Bundesland}
-        }
-        let name = rows[index].Landkreis
-        if (rows[index].Prefix != 'LK') {
-            name = rows[index].Landkreis + ' (' + rows[index].Prefix + ')'
-        }
-        data.geo[rows[index].KrS.slice(0, 2)].Level2[rows[index].KrS] = { Name:  name }
+router.get('/data/geo/level3/:level2?/', function (req, res, next) {
+    var data = {}
+    if (req.params.level2 != undefined) {
+        level2_sql = 'SELECT Level2_Name FROM Level2 WHERE Level2_ID = ' + req.params.level2 + ' ORDER BY Level2_Name;'
+        db.all(level2_sql, [], (err, level2_rows) => {
+            data[level2_rows[0].Level2_Name] = {}
+            level3_sql = 'SELECT Level3_ID, Level3_Name, Level3_Prefix FROM Level3 WHERE Level2_ID = ' + req.params.level2 + ' ORDER BY Level3_Name;'
+            db.all(level3_sql, [], (err, level3_rows) => {
+                for (let index = 0; index < level3_rows.length; index++) {
+                    if (level3_rows[index].Level3_Prefix != 'LK') {
+                        data[level2_rows[0].Level2_Name][level3_rows[index].Level3_ID] = level3_rows[index].Level3_Prefix + ' ' + level3_rows[index].Level3_Name
+                    } else {
+                        data[level2_rows[0].Level2_Name][level3_rows[index].Level3_ID] = level3_rows[index].Level3_Name
+                    }
+                }
+                res.json(data)
+            })
+        })   
+    } else {
+        level3_sql = 'SELECT Level3_ID, Level3_Name, Level3_Prefix FROM Level3;'
+        db.all(level3_sql, [], (err, level3_rows) => {
+            for (let index = 0; index < level3_rows.length; index++) {
+                if (level3_rows[index].Level3_Prefix != 'LK') {
+                    data[level3_rows[index].Level3_ID] = level3_rows[index].Level3_Prefix + ' ' + level3_rows[index].Level3_Name
+                } else {
+                    data[level3_rows[index].Level3_ID] = level3_rows[index].Level3_Name
+                }
+            }
+            res.json(data)
+        })
     }
 })
-
-router.get('/data/:date/:location', function (req, res, next) {
-    let date_dict
-    let level1_dict
-    let level2_dict
-    for (const item in data) {
-        if (new Date(item) >= startDate && new Date(item) <= endDate) {
-            date_dict[item] = data[item]
-        }
-    }
-    for (const item in date_dict) {
-        level1_dict[item] = date_dict[item][req.params.level1]
-    }
-    for (const item in date_dict) {
-        level2_dict[item] = date_dict[item][req.params.level1][req.params.level2]
-    }
-    res.json(level2_dict)
-})
-*/
 
 module.exports = router
