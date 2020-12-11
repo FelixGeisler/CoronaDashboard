@@ -25,7 +25,7 @@ router.get('/data/geo/level3/:level2?/', function (req, res, next) {
             level3_sql = 'SELECT Level3_ID, Level3_Name, Level3_Prefix FROM Level3 WHERE Level2_ID = ' + req.params.level2 + ' ORDER BY Level3_Name;'
             db.all(level3_sql, [], (err, level3_rows) => {
                 for (let index = 0; index < level3_rows.length; index++) {
-                    if (level3_rows[index].Level3_Prefix != 'LK') {
+                    if (level3_rows[index].Level3_Prefix != 'LK' && level3_rows[index].Level3_Prefix != 'Bezirk') {
                         data[level2_rows[0].Level2_Name][level3_rows[index].Level3_ID] = level3_rows[index].Level3_Prefix + ' ' + level3_rows[index].Level3_Name
                     } else {
                         data[level2_rows[0].Level2_Name][level3_rows[index].Level3_ID] = level3_rows[index].Level3_Name
@@ -38,7 +38,7 @@ router.get('/data/geo/level3/:level2?/', function (req, res, next) {
         level3_sql = 'SELECT Level3_ID, Level3_Name, Level3_Prefix FROM Level3;'
         db.all(level3_sql, [], (err, level3_rows) => {
             for (let index = 0; index < level3_rows.length; index++) {
-                if (level3_rows[index].Level3_Prefix != 'LK') {
+                if (level3_rows[index].Level3_Prefix != 'LK' && level3_rows[index].Level3_Prefix != 'Bezirk') {
                     data[level3_rows[index].Level3_ID] = level3_rows[index].Level3_Prefix + ' ' + level3_rows[index].Level3_Name
                 } else {
                     data[level3_rows[index].Level3_ID] = level3_rows[index].Level3_Name
