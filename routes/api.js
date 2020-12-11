@@ -2,7 +2,7 @@ const express = require('express')
 const { data } = require('jquery')
 const sqlite3 = require('sqlite3').verbose()
 const router = express.Router()
-
+/*
 var startDate
 var endDate
 
@@ -115,5 +115,5 @@ function getDate(date) {
         endDate = startDate
     }
 }
-
+*/
 module.exports = router
