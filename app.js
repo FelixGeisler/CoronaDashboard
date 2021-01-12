@@ -28,10 +28,10 @@ app.use('/', router)
 app.get('/api/:date?/:level1?/:level2?', require(path.join(__dirname, '/routes/api')))
 app.get('/data/geo/level2/:level1/', require(path.join(__dirname, '/routes/data')))
 app.get('/data/geo/level3/:level2?/', require(path.join(__dirname, '/routes/data')))
+app.get('/data/corona/level2/:level2_id', require(path.join(__dirname, '/routes/data')))
 app.get('/data/corona/level3/:level3_id', require(path.join(__dirname, '/routes/data')))
 app.get('/globe', require(path.join(__dirname, '/routes/globe')))
 app.get('/table', require(path.join(__dirname, '/routes/table')))
-
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -48,8 +48,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.render('error')
 })
-
-database.runDB() //Just for DEBUG. TODO: Remove
 
 cron.schedule('0 * * * *', function () {
   console.log('Running cron job...')

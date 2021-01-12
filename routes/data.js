@@ -18,10 +18,22 @@ router.get('/data/geo/level2/:level1/', function (req, res, next) {
 
 router.get('/data/corona/level3/:level3_id', function (req, res, next) {
     var data = []
-    sql = 'SELECT Date, Cases FROM CoronaData WHERE Level3_ID = ' + req.params.level3_id + ';'
+    sql = 'SELECT Date, Cases, Deaths FROM CoronaData WHERE Level3_ID = ' + req.params.level3_id + ';'
     db.all(sql, [], (err, rows) => {
         for (let index = 0; index < rows.length; index++) {
             data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/corona/level2/:level2_id', function (req, res, next) {
+    var data = []
+    var level2_ids = []
+    union_sql = 'SELECT Date, sum(Cases) as Cases, sum(Deaths) as Deaths FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level2_ID = ' + req.params.level2_id + ' GROUP BY Date ORDER BY Date;'
+    db.all(union_sql, [], (err, union_rows) => {
+        for (let index = 0; index < union_rows.length; index++) {
+            data.push(union_rows[index])
         }
         res.json(data)
     })

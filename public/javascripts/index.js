@@ -1,5 +1,3 @@
-d3 = require("d3@6")
-
 var level2_field = document.getElementById('level2')
 var level2_dropdown = document.getElementById('level2_dropdown')
 var level2_dropdown_values = []
@@ -88,7 +86,10 @@ function setLevel1(Level1_ID) {
         $.each(data, function (key, val) {
             level2_item = document.createElement('li')
             level2_item.id = 'level2_dd_' + key
-            level2_item.addEventListener('click', function () { setLevel2(this.id.slice(10)) })
+            level2_item.addEventListener('click', function () { 
+                setLevel2(this.id.slice(10)) 
+                setLineChart('level2', this.id.slice(10))
+            })
             level2_item.appendChild(document.createTextNode(val))
             level2_dropdown.appendChild(level2_item)
             level2_dropdown_values.push(val)
@@ -111,7 +112,10 @@ function setLevel2(Level2_ID) {
         $.each(data[Object.keys(data)[0]], function (key, val) {
             level3_item = document.createElement('li')
             level3_item.id = 'level3_dd_' + key
-            level3_item.addEventListener('click', function () { setLevel3(this.id.slice(10)) })
+            level3_item.addEventListener('click', function () { 
+                setLevel3(this.id.slice(10))
+                setLineChart('level3', this.id.slice(10)) 
+            })
             level3_item.appendChild(document.createTextNode(val))
             level3_dropdown.appendChild(level3_item)
             level3_dropdown_values.push(val)
@@ -120,18 +124,67 @@ function setLevel2(Level2_ID) {
 }
 
 function setLevel3(Level3_ID) {
-    level3_dropdown.classList.remove('open');   
+    level3_dropdown.classList.remove('open');
     current_level3 = Level3_ID
     $.getJSON('data/geo/level3/', function (data) {
         level3_field.value = data[Level3_ID]
     })
 }
 
-var svg = d3.select('#charts')
-  .append('svg')
-  .append('g')
+function setLineChart(level, id) {
+    //LineChart
+    d3.select('#lineChart').remove()
 
-  d3.json('data/geo/level2', function(d) {
-      
-      return {data}
-  })
+    var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+    var svg = d3.select('#charts')
+        .append('svg')
+        .attr('id', 'lineChart')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
+    d3.json('data/corona/' + level + '/' + id, function (data) {
+
+        var x = d3.scaleTime()
+            .domain(d3.extent(data, function (d) { return d3.timeParse('%Y-%m-%d')(d.Date); }))
+            .range([0, width])
+
+        var y = d3.scaleLinear()
+            .domain([d3.min(data, function (d) { return + d.Cases }), d3.max(data, function (d) { return + d.Cases; })])
+            .range([height, 0]);
+
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%m-%d")))
+            .selectAll('text')
+            .style('text-anchor', 'end')
+            .attr('dx', '-.8em')
+            .attr('dy', '.15em')
+            .attr('transform', 'rotate(-65)')
+
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+        svg.append("path")
+            .datum(data)
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 1.5)
+            .attr("d", d3.line()
+                .x(function (d) {
+                    return x(d3.timeParse('%Y-%m-%d')(d.Date))
+                })
+                .y(function (d) {
+                    console.log(d)
+                    return y(d.Cases)
+                })
+            )
+    })
+
+    //BarChart
+
+}
