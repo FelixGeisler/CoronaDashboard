@@ -16,6 +16,17 @@ router.get('/data/geo/level2/:level1/', function (req, res, next) {
     })
 })
 
+router.get('/data/corona/level3/:level3_id', function (req, res, next) {
+    var data = []
+    sql = 'SELECT Date, Cases FROM CoronaData WHERE Level3_ID = ' + req.params.level3_id + ';'
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
 router.get('/data/geo/level3/:level2?/', function (req, res, next) {
     var data = {}
     if (req.params.level2 != undefined) {

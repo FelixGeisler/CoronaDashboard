@@ -1,3 +1,5 @@
+d3 = require("d3@6")
+
 var level2_field = document.getElementById('level2')
 var level2_dropdown = document.getElementById('level2_dropdown')
 var level2_dropdown_values = []
@@ -124,3 +126,12 @@ function setLevel3(Level3_ID) {
         level3_field.value = data[Level3_ID]
     })
 }
+
+var svg = d3.select('#charts')
+  .append('svg')
+  .append('g')
+
+  d3.json('data/geo/level2', function(d) {
+      
+      return {data}
+  })
