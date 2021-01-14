@@ -86,8 +86,8 @@ function setLevel1(Level1_ID) {
         $.each(data, function (key, val) {
             level2_item = document.createElement('li')
             level2_item.id = 'level2_dd_' + key
-            level2_item.addEventListener('click', function () { 
-                setLevel2(this.id.slice(10)) 
+            level2_item.addEventListener('click', function () {
+                setLevel2(this.id.slice(10))
                 setLineChart('level2', this.id.slice(10))
             })
             level2_item.appendChild(document.createTextNode(val))
@@ -112,9 +112,9 @@ function setLevel2(Level2_ID) {
         $.each(data[Object.keys(data)[0]], function (key, val) {
             level3_item = document.createElement('li')
             level3_item.id = 'level3_dd_' + key
-            level3_item.addEventListener('click', function () { 
+            level3_item.addEventListener('click', function () {
                 setLevel3(this.id.slice(10))
-                setLineChart('level3', this.id.slice(10)) 
+                setLineChart('level3', this.id.slice(10))
             })
             level3_item.appendChild(document.createTextNode(val))
             level3_dropdown.appendChild(level3_item)
@@ -132,59 +132,175 @@ function setLevel3(Level3_ID) {
 }
 
 function setLineChart(level, id) {
-    //LineChart
-    d3.select('#lineChart').remove()
 
-    var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+    d3.select('#line').remove()
 
-    var svg = d3.select('#charts')
-        .append('svg')
-        .attr('id', 'lineChart')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    d3.json('/data/line/' + level + '/' + id).then(function(data) {
+        
+        var size = ({height: 350, width: 500})
+        var margin = ({top: 20, right: 60, bottom: 40, left: 60})
 
-    d3.json('data/corona/' + level + '/' + id, function (data) {
+        var parseDate = d3.timeParse('%Y-%m-%d')
 
-        var x = d3.scaleTime()
-            .domain(d3.extent(data, function (d) { return d3.timeParse('%Y-%m-%d')(d.Date); }))
-            .range([0, width])
+        var xAxis = g => g
+            .attr('transform', `translate(0, ${size.height - margin.bottom})`)
+            .call(d3.axisBottom(x)
+            .tickFormat(d3.timeFormat('%d.%m')))
+
+        var y1Axis = g => g
+            .attr('transform', `translate(${margin.left}, 0)`)
+            .call(d3.axisLeft(y1))
+
+        var y2Axis = g => g
+            .attr('transform', `translate(${size.width - margin.right}, 0)`)
+            .call(d3.axisRight(y2))
+
+        var x = d3.scaleUtc()
+            .domain(d3.extent(data, d => parseDate(d.Date)))
+            .range([margin.left, size.width - margin.right])
+
+        var y1 = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.Cases)])
+            .range([size.height - margin.bottom, margin.top])
+
+        var y2 = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.Deaths)])
+            .range([size.height - margin.bottom, margin.top])
+
+        var cases = d3.line()
+            .defined(d => !isNaN(d.Cases))
+            .x(d => x(parseDate(d.Date)))
+            .y(d => y1(d.Cases))
+
+        var deaths = d3.line()
+            .defined(d => !isNaN(d.Deaths))
+            .x(d => x(parseDate(d.Date)))
+            .y(d => y2(d.Deaths))
+
+        const svg = d3.select('#linechart')
+            .append('svg')
+            .attr('viewBox', [0, 0, size.width, size.height])
+            .attr('id', 'line')
+            .attr('width', size.width + margin.left + margin.right)
+            .attr('height', size.height + margin.top + margin.bottom)
+        
+        svg.append('g')
+            .call(y1Axis)
+
+        svg.append('g')
+            .call(y2Axis)
+        
+        svg.append('g')
+            .call(xAxis)
+            .selectAll('text')
+                .attr('y', -2)
+                .attr('x', -10)
+                .attr('transform', 'rotate(-70)')
+                .style('text-anchor', 'end')
+
+        svg.append('path')
+            .datum(data)
+            .attr('fill', 'none')
+            .attr('stroke', '#022d4d')
+            .attr('stroke-width', 1.5)
+            .attr('stroke-linejoin', 'round')
+            .attr('stroke-linecap', 'round')
+            .attr('d', cases)
+
+        svg.append('path')
+            .datum(data)
+            .attr('fill', 'none')
+            .attr('stroke', '#ff9412')
+            .attr('stroke-width', 1.5)
+            .attr('stroke-linejoin', 'round')
+            .attr('stroke-linecap', 'round')
+            .attr('d', deaths)
+
+    })
+}
+
+function setBarChart(level, id) {
+
+    d3.select('#bar').remove()
+
+    d3.json('/data/bar/' + level + '/' + id).then(function(data) {
+
+        var size = ({height: 350, width: 500})
+        var margin = ({top: 20, right: 60, bottom: 40, left: 60})
+
+        var xAxis = g => g
+            .attr('transform', `translate(0, ${size.height - margin.bottom})`)
+            .call(d3.axisBottom(x).tickFormat(i => data[i].Name).tickSizeOuter(0))
+
+        var yAxis = g => g
+            .attr('transform', `translate(${margin.left}, 0)`)
+            .call(d3.axisLeft(y))
+
+        var x = d3.scaleBand()
+            .domain(d3.range(data.length))
+            .range([margin.left, size.width - margin.right])
+            .padding(0.1)
 
         var y = d3.scaleLinear()
-            .domain([d3.min(data, function (d) { return + d.Cases }), d3.max(data, function (d) { return + d.Cases; })])
-            .range([height, 0]);
+            .domain([0, d3.max(data, d => d.Cases)])
+            .range([size.height - margin.bottom, margin.top])
 
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%m-%d")))
-            .selectAll('text')
-            .style('text-anchor', 'end')
-            .attr('dx', '-.8em')
-            .attr('dy', '.15em')
-            .attr('transform', 'rotate(-65)')
+        const svg = d3.select('#barchart')
+            .append('svg')
+            .attr('viewBox', [0, 0, size.width, size.height])
+            .attr('id', 'bar')
+            .attr('width', size.width + margin.left + margin.right)
+            .attr('height', size.height + margin.top + margin.bottom)
+        
+        svg.append('g')
+            .call(yAxis)
+        
+        svg.append('g')
+            .call(xAxis)
+        console.log(data)
+        console.log(data.length)
+        svg.append('g')
+            .selectAll('rect')
+            .data(data)
+            .join('rect')
+                .attr('x', (d, i) => (data.length === 1 ? '225' : x(i)))
+                .attr('y', d => y(d.Cases))
+                .attr('fill', d => d.ID == id ? '#18627f' : '#022d4d')
+                .attr('height', d => y(0) - y(d.Cases - d.Deaths))
+                .attr('width', (data.length === 1 ? size.width/10 : x.bandwidth()))
 
-        svg.append("g")
-            .call(d3.axisLeft(y));
-
-        svg.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "steelblue")
-            .attr("stroke-width", 1.5)
-            .attr("d", d3.line()
-                .x(function (d) {
-                    return x(d3.timeParse('%Y-%m-%d')(d.Date))
-                })
-                .y(function (d) {
-                    console.log(d)
-                    return y(d.Cases)
-                })
-            )
+        svg.append('g')
+            .selectAll('rect')
+            .data(data)
+            .join('rect')
+                .attr('x', (d, i) => (data.length === 1 ? '225' : x(i)))
+                .attr('y', d => y(d.Deaths))
+                .attr('fill', '#ff9412')
+                .attr('height', d => y(0) - y(d.Deaths))
+                .attr('width', (data.length === 1 ? size.width/10 : x.bandwidth()))
     })
-
-    //BarChart
-
 }
+
+function setSummary(level, id) {
+    d3.json('/data/summary/' + level + '/' + id).then(function(data) {
+
+        var format1 = d3.format(',')
+        var format2 = d3.format('.4f')
+
+        var deathrate_change = (format2(data[1].Deaths / data[1].Cases - data[0].Deaths / data[0].Cases))
+        d3.select('#location').node().innerHTML = data[1].Name
+        d3.select('#cases').node().innerHTML = format1(data[1].Cases).replaceAll(',', '.') + ' (+' + (format1(data[1].Cases - data[0].Cases)).replaceAll(',', '.') + ')'
+        d3.select('#deaths').node().innerHTML = format1(data[1].Deaths).replaceAll(',', '.') + ' (+' + (format1(data[1].Deaths - data[0].Deaths)).replaceAll(',', '.') + ')'
+        d3.select('#deathrate').node().innerHTML =  format2((data[1].Deaths / data[1].Cases)).replace('.', ',') + '% (' + (deathrate_change > 0 ? '+' + deathrate_change.replaceAll('.', ',') : '' + deathrate_change.replaceAll('.', ',')) + ')'
+        d3.select('#population').node().innerHTML = format1(data[1].Population).replaceAll(',', '.')
+    })
+}
+
+function loadPage(level, id) {
+    setLineChart(level, id)
+    setBarChart(level, id)
+    setSummary(level, id)
+}
+
+//OnStart show Germany
+loadPage('level1', 49)

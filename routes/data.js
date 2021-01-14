@@ -16,29 +16,6 @@ router.get('/data/geo/level2/:level1/', function (req, res, next) {
     })
 })
 
-router.get('/data/corona/level3/:level3_id', function (req, res, next) {
-    var data = []
-    sql = 'SELECT Date, Cases, Deaths FROM CoronaData WHERE Level3_ID = ' + req.params.level3_id + ';'
-    db.all(sql, [], (err, rows) => {
-        for (let index = 0; index < rows.length; index++) {
-            data.push(rows[index])
-        }
-        res.json(data)
-    })
-})
-
-router.get('/data/corona/level2/:level2_id', function (req, res, next) {
-    var data = []
-    var level2_ids = []
-    union_sql = 'SELECT Date, sum(Cases) as Cases, sum(Deaths) as Deaths FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level2_ID = ' + req.params.level2_id + ' GROUP BY Date ORDER BY Date;'
-    db.all(union_sql, [], (err, union_rows) => {
-        for (let index = 0; index < union_rows.length; index++) {
-            data.push(union_rows[index])
-        }
-        res.json(data)
-    })
-})
-
 router.get('/data/geo/level3/:level2?/', function (req, res, next) {
     var data = {}
     if (req.params.level2 != undefined) {
@@ -70,6 +47,114 @@ router.get('/data/geo/level3/:level2?/', function (req, res, next) {
             res.json(data)
         })
     }
+})
+
+router.get('/data/line/level1/:level1_id', function (req, res, next) {
+    var data = []
+    union_sql = 'SELECT Date, sum(Cases) as Cases, sum(Deaths) as Deaths, sum(Population) AS Population FROM CoronaData INNER JOIN Level3 ON Level3.Level3_ID = CoronaData.Level3_ID INNER JOIN Level2 ON Level2.Level2_ID = Level3.Level2_ID WHERE Level2.Level1_ID = ' + req.params.level1_id + ' GROUP BY Level2.Level1_ID, Date ORDER BY Date;'
+    db.all(union_sql, [], (err, union_rows) => {
+        for (let index = 0; index < union_rows.length; index++) {
+            data.push(union_rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/line/level2/:level2_id', function (req, res, next) {
+    var data = []
+    union_sql = 'SELECT Date, sum(Cases) as Cases, sum(Deaths) as Deaths, sum(Population) AS Population FROM CoronaData INNER JOIN Level3 ON Level3.Level3_ID = CoronaData.Level3_ID WHERE Level2_ID = ' + req.params.level2_id + ' GROUP BY Level2_ID, Date ORDER BY Date;'
+    db.all(union_sql, [], (err, union_rows) => {
+        for (let index = 0; index < union_rows.length; index++) {
+            data.push(union_rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/line/level3/:level3_id', function (req, res, next) {
+    var data = []
+    sql = 'SELECT Date, Cases, Deaths, Population FROM CoronaData WHERE Level3_ID = ' + req.params.level3_id + ';'
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/bar/level1/:level1_id?', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    union_sql = `SELECT Level1.Level1_ID AS ID, Level1_Abbr as Name, sum(Cases) as Cases, sum(Deaths) as Deaths, sum(Population) as Population FROM CoronaData INNER JOIN Level3 ON Level3.Level3_ID = CoronaData.Level3_ID INNER JOIN Level2 ON Level2.Level2_ID = Level3.Level2_ID INNER JOIN Level1 ON Level1.Level1_ID = Level2.Level1_ID WHERE Date = "${today}" GROUP BY Level1.Level1_ID ORDER BY SUM(Cases);`
+    db.all(union_sql, [], (err, union_rows) => {
+        for (let index = 0; index < union_rows.length; index++) {
+            data.push(union_rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/bar/level2/:level2_id', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    union_sql = `SELECT Level2.Level2_ID AS ID, Level2.Level2_Abbr AS Name, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population FROM Level2 INNER JOIN Level3 ON Level2.Level2_ID = Level3.Level2_ID INNER JOIN CoronaData ON Level3.Level3_ID = CoronaData.Level3_ID WHERE Level1_ID = (SELECT Level1_ID FROM Level2 WHERE Level2_ID = "${req.params.level2_id}") AND Date = "${today}" GROUP BY Level2.Level2_ID ORDER BY SUM(Cases);`
+    db.all(union_sql, [], (err, union_rows) => {
+        for (let index = 0; index < union_rows.length; index++) {
+            data.push(union_rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/bar/level3/:level3_id', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    sql = `SELECT Level3.Level3_ID AS Name, Level3.Level3_ID AS ID, Cases, Deaths, Population FROM Level3 INNER JOIN CoronaData ON Level3.Level3_ID = CoronaData.Level3_ID  WHERE Level2_ID = (SELECT Level2_ID FROM Level3 WHERE Level3_ID = "${req.params.level3_id}") AND Date = "${today}" ORDER BY Cases;`
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/summary/level1/:level1_id', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    var yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleString('en-CA').split(',')[0]
+    sql = `SELECT Level1.Level1_Name AS Name, sum(Cases) as Cases, sum(Deaths) as Deaths, sum(Population) as Population, Date FROM CoronaData INNER JOIN Level3 ON Level3.Level3_ID = CoronaData.Level3_ID INNER JOIN Level2 ON Level2.Level2_ID = Level3.Level2_ID INNER JOIN Level1 ON Level1.Level1_ID = Level2.Level1_ID WHERE Level1.Level1_ID = ${req.params.level1_id} AND (Date = "${today}" OR Date = "${yesterday}") GROUP BY CoronaData.Date;`
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/summary/level2/:level2_id', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    var yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleString('en-CA').split(',')[0]
+    sql = `SELECT Level2.Level2_Name AS Name, sum(Cases) as Cases, sum(Deaths) as Deaths, sum(Population) as Population, Date FROM CoronaData INNER JOIN Level3 ON Level3.Level3_ID = CoronaData.Level3_ID INNER JOIN Level2 ON Level2.Level2_ID = Level3.Level2_ID WHERE Level2.Level2_ID = ${req.params.level2_id} AND (Date = "${today}" OR Date = "${yesterday}") GROUP BY CoronaData.Date;`
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/summary/level3/:level3_id', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    var yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleString('en-CA').split(',')[0]
+    sql = `SELECT Level3.Level3_Name AS Name, Cases, Deaths, Population, Date FROM CoronaData INNER JOIN Level3 ON Level3.Level3_ID = CoronaData.Level3_ID WHERE Level3.Level3_ID = ${req.params.level3_id} AND (Date = "${today}" OR Date = "${yesterday}") GROUP BY CoronaData.Date;`
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
 })
 
 module.exports = router

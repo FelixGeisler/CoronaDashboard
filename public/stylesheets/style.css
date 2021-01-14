@@ -279,6 +279,24 @@ svg g.Level3:hover path {
   cursor: pointer;
 }
 
+#location, #cases, #deaths, #deathrate, #population {
+  font-size: 2em;
+  font-weight: bold;
+  line-height: 1em;
+}
+
+#location {
+  color: #18627f;
+}
+
+#cases {
+  color: #022d4d;
+}
+
+#deaths, #deathrate {
+  color: #ff9412;
+}
+
 /* 
     TODO: 
         - Shadows 
