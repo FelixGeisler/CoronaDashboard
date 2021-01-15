@@ -5,6 +5,21 @@ const router = express.Router()
 
 const db = new sqlite3.Database('./database/db.sqlite')
 
+router.get('/data/geo/:level/:id/', function (req, res, next) {
+    var data = {}
+    switch (req.params.level) {
+        case 1:
+            sqlString = ''
+            break
+        case 2:
+            sqlString = ''
+            break
+        default:
+            sqlString = ''
+            break
+    }
+})
+
 router.get('/data/geo/level2/:level1/', function (req, res, next) {
     var data = {}
     sqlString = 'SELECT Level2_ID, Level2_Name FROM Level2 WHERE Level1_ID = ' + req.params.level1 + ' ORDER BY Level2_Name;'
@@ -156,5 +171,32 @@ router.get('/data/summary/level3/:level3_id', function (req, res, next) {
         res.json(data)
     })
 })
+
+router.get('/data/vaccination/level1/:level1_id', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    var yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleString('en-CA').split(',')[0]
+    sql = `SELECT Date, Level2.Level1_ID, Vaccination FROM VaccinationData INNER JOIN Level2 ON VaccinationData.Level2_ID = Level2.Level2_ID WHERE Level1_ID = ${req.params.level1_id} GROUP BY Level1_ID, Date ORDER BY Date DESC LIMIT 1;`
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
+router.get('/data/vaccination/level2/:level2_id', function (req, res, next) {
+    var data = []
+    var today = new Date().toLocaleString('en-CA').split(',')[0]
+    var yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleString('en-CA').split(',')[0]
+    sql = `SELECT Date, Level2_ID, Vaccination FROM VaccinationData WHERE Level2_ID = ${req.params.level2_id} ORDER BY Date DESC LIMIT 1;`
+    db.all(sql, [], (err, rows) => {
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
+
 
 module.exports = router

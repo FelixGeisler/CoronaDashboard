@@ -42,6 +42,9 @@ app.get('/data/summary/level1/:level1_id', require(path.join(__dirname, '/routes
 app.get('/data/summary/level2/:level2_id', require(path.join(__dirname, '/routes/data')))
 app.get('/data/summary/level3/:level3_id', require(path.join(__dirname, '/routes/data')))
 
+app.get('/data/vaccination/level1/:level1_id', require(path.join(__dirname, '/routes/data')))
+app.get('/data/vaccination/level2/:level2_id', require(path.join(__dirname, '/routes/data')))
+
 app.get('/globe', require(path.join(__dirname, '/routes/globe')))
 app.get('/table', require(path.join(__dirname, '/routes/table')))
 

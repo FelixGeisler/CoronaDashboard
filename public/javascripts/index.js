@@ -257,8 +257,7 @@ function setBarChart(level, id) {
         
         svg.append('g')
             .call(xAxis)
-        console.log(data)
-        console.log(data.length)
+            
         svg.append('g')
             .selectAll('rect')
             .data(data)
@@ -289,9 +288,12 @@ function setSummary(level, id) {
 
         var deathrate_change = (format2(data[1].Deaths / data[1].Cases - data[0].Deaths / data[0].Cases))
         d3.select('#location').node().innerHTML = data[1].Name
-        d3.select('#cases').node().innerHTML = format1(data[1].Cases).replaceAll(',', '.') + ' (+' + (format1(data[1].Cases - data[0].Cases)).replaceAll(',', '.') + ')'
-        d3.select('#deaths').node().innerHTML = format1(data[1].Deaths).replaceAll(',', '.') + ' (+' + (format1(data[1].Deaths - data[0].Deaths)).replaceAll(',', '.') + ')'
-        d3.select('#deathrate').node().innerHTML =  format2((data[1].Deaths / data[1].Cases)).replace('.', ',') + '% (' + (deathrate_change > 0 ? '+' + deathrate_change.replaceAll('.', ',') : '' + deathrate_change.replaceAll('.', ',')) + ')'
+        d3.select('#cases').node().innerHTML = format1(data[1].Cases).replaceAll(',', '.')
+        d3.select('#casesdiff').node().innerHTML = (format1(data[1].Cases - data[0].Cases)).replaceAll(',', '.')
+        d3.select('#deaths').node().innerHTML = format1(data[1].Deaths).replaceAll(',', '.')
+        d3.select('#deathsdiff').node().innerHTML = (format1(data[1].Deaths - data[0].Deaths)).replaceAll(',', '.')
+        d3.select('#deathrate').node().innerHTML =  format2((data[1].Deaths / data[1].Cases)).replace('.', ',')
+        d3.select('#deathratediff').node().innerHTML = (deathrate_change > 0 ? '+' + deathrate_change.replaceAll('.', ',') : '' + deathrate_change.replaceAll('.', ','))
         d3.select('#population').node().innerHTML = format1(data[1].Population).replaceAll(',', '.')
     })
 }

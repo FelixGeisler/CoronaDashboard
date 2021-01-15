@@ -291,7 +291,7 @@ svg g.Level3:hover path {
   cursor: pointer;
 }
 
-#location, #cases, #deaths, #deathrate, #population {
+#location, #cases, #deaths, #deathrate, #population, #news-head {
   font-size: 2em;
   font-weight: bold;
   line-height: 1em;
@@ -307,6 +307,10 @@ svg g.Level3:hover path {
 
 #deaths, #deathrate {
   color: #ff9412;
+}
+
+#news {
+  outline: 2px solid black;
 }
 
 /* 
