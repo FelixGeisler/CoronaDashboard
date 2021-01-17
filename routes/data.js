@@ -36,7 +36,6 @@ router.get('/data/geo/:level/:id?/', function (req, res, next) {
         default:
             res.render('error', { message: 'Invalid level:', error: { status: `${req.params.level} is not a valid level. The level variable describes the administrative level of a region. It should be 0 (World), 1 (Countries) or 2 (States).` } })
             return
-            break
     }
     db.all(sqlString, [], (err, rows) => {
         if (err) {
@@ -59,29 +58,31 @@ router.get('/data/line/:level/:id/:start/:stop', function (req, res, next) {
 
     switch (req.params.level) {
         case '0':
-            sqlString = `SELECT Date, Sum(Cases) AS Cases, Sum(Deaths) AS Deaths, Sum(Population) AS Population FROM CoronaData WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" GROUP BY Date ORDER BY Date;`
+            sqlString = `SELECT Date, Sum(Cases) AS Cases, Sum(Deaths) AS Deaths FROM CoronaData WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" GROUP BY Date ORDER BY Date;`
             break
         case '1':
-            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND Level2.Level1_ID = ${req.params.id} GROUP BY Date, Level2.Level1_ID ORDER BY Date;`
+            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND Level2.Level1_ID = ${req.params.id} GROUP BY Date, Level2.Level1_ID ORDER BY Date;`
             break
         case '2':
-            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND Level3.Level2_ID = "${req.params.id}" GROUP BY Date, Level3.Level2_ID ORDER BY Date;`
+            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND Level3.Level2_ID = "${req.params.id}" GROUP BY Date, Level3.Level2_ID ORDER BY Date;`
             break
         case '3':
-            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population FROM CoronaData WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND CoronaData.Level3_ID = "${req.params.id}" GROUP BY Date, CoronaData.Level3_ID ORDER BY Date;`
+            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths FROM CoronaData WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND CoronaData.Level3_ID = "${req.params.id}" GROUP BY Date, CoronaData.Level3_ID ORDER BY Date;`
             break
         default:
             res.render('error', { message: 'Invalid level:', error: { status: `${req.params.level} is not a valid level. The level variable describes the administrative level of a region. It should be 0 (World), 1 (Countries) or 2 (States).` } })
-            break
+            return
     }
     db.all(sqlString, [], (err, rows) => {
         if (err) {
             res.render('error', { error: err })
+            return
         }
         for (let index = 0; index < rows.length; index++) {
             data.push(rows[index])
         }
         res.json(data)
+        return
     })
 })
 
