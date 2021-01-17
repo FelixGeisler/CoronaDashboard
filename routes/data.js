@@ -35,16 +35,19 @@ router.get('/data/geo/:level/:id?/', function (req, res, next) {
             break
         default:
             res.render('error', { message: 'Invalid level:', error: { status: `${req.params.level} is not a valid level. The level variable describes the administrative level of a region. It should be 0 (World), 1 (Countries) or 2 (States).` } })
+            return
             break
     }
     db.all(sqlString, [], (err, rows) => {
         if (err) {
             res.render('error', { error: err })
+            return
         }
         for (let index = 0; index < rows.length; index++) {
             data.push(rows[index])
         }
         res.json(data)
+        return
     })
 })
 
