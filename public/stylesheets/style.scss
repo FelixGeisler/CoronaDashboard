@@ -24,16 +24,6 @@ nav {
   z-index: 2;
 }
 
-#subNav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 4rem;
-  width: 100%;
-  background-color: #022d4d;
-  z-index: 1;
-}
-
 .chosen-value,
 .value-list {
   position: absolute;
@@ -249,34 +239,65 @@ svg:hover .pen2 {
   }
 }
 
-#DateRange {
+#DateLeft {
   position: absolute;
-  left: calc(50% - 2rem);
-  top: 1rem;
-  width: 4rem;
-  height: 5rem;
+  left: -2.5rem;
+  top: calc(50% - 2rem);
+  width: 5rem;
+  height: 4rem;
+  z-index: 1;
   cursor: pointer;
 }
 
-#DateRange svg {
-  height: 5rem;
-  width: 4rem;
+#DateRight {
+  position: absolute;
+  right: -2.5rem;
+  top: calc(50% - 2rem);
+  width: 5rem;
+  height: 4rem;
+  z-index: 1;
+  cursor: pointer;
 }
 
-#DateRange:hover > svg {
-  animation-name: wiggle;
+#DateLeft svg, #DateRight svg {
+  height: 4rem;
+  width: 5rem;
+}
+
+#DateLeft:hover > svg{
+  animation-name: wiggleLeft;
   animation-duration: 2s;
   animation-iteration-count: infinite;
   transform-origin: 50% 50%;
   display: inline-block;
 }
 
-@keyframes wiggle {
+#DateRight:hover > svg {
+  animation-name: wiggleRight;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  transform-origin: 50% 50%;
+  display: inline-block;
+}
+
+@keyframes wiggleLeft {
   0% {
     transform: translate(0, 0);
   }
   50% {
-    transform: translate(0, 7px);
+    transform: translate(-7px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes wiggleRight {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(7px, 0);
   }
   100% {
     transform: translate(0, 0);
@@ -291,22 +312,37 @@ svg g.Level3:hover path {
   cursor: pointer;
 }
 
-#location, #cases, #deaths, #deathrate, #population {
-  font-size: 2em;
+#summary {
+  font-size: 1.8em;
   font-weight: bold;
   line-height: 1em;
+  text-align: center;
 }
 
 #location {
   color: #18627f;
 }
 
-#cases {
+#cases, #casesdiff {
   color: #022d4d;
 }
 
-#deaths, #deathrate {
+#deaths, #deathsdiff {
   color: #ff9412;
+}
+
+#deathrate, #deathratediff {
+  color: #AF3800;
+}
+
+#vaccination, #vaccinationdiff {
+  color: #018E42;
+}
+
+#casesdiff, #deathsdiff, #deathratediff, #vaccinationdiff {
+  padding: 0;
+  font-size: 0.8em !important;
+  font-weight: normal;
 }
 
 /* 

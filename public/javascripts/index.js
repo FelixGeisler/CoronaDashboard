@@ -1,151 +1,165 @@
-var level2_field = document.getElementById('level2')
-var level2_dropdown = document.getElementById('level2_dropdown')
-var level2_dropdown_values = []
+var fields = [document.getElementById('level2'), document.getElementById('level3')]
+var dropdown_menus = [document.getElementById('level2_dropdown'), document.getElementById('level3_dropdown')]
+var dropdown_values = [{}, {}]
 
-var level3_field = document.getElementById('level3')
-var level3_dropdown = document.getElementById('level3_dropdown')
-var level3_dropdown_values = []
 
-var current_level1 = 49
-var current_level2 = undefined
-var current_level3 = undefined
+var current_ids = []
+var current_level
+var current_interval = 'Month'
 
-setLevel1(current_level1)
+/* Useful dates
+var firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleDateString('en-CA')
+var lastOfMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toLocaleDateString('en-CA')
+var yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toLocaleDateString('en-CA')
+var today = new Date().toLocaleDateString('en-CA')
+*/
+
+var start = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+var stop = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+
 
 // Show li items on focus
-level2_field.addEventListener('focus', () => {
-    level2_field.placeholder = 'Type to filter'
-    level2_dropdown.classList.add('open')
+fields[0].addEventListener('focus', () => {
+    fields[0].placeholder = 'Type to filter'
+    dropdown_menus[0].classList.add('open')
 })
 
-level3_field.addEventListener('focus', () => {
-    level3_field.placeholder = 'Type to filter'
-    level3_dropdown.classList.add('open')
+fields[1].addEventListener('focus', () => {
+    fields[1].placeholder = 'Type to filter'
+    dropdown_menus[1].classList.add('open')
 })
 
 // lose focus on click on !dropdown
 document.addEventListener('click', (evt) => {
-    const isDropdownLevel2 = level2_dropdown.contains(evt.target);
-    const isDropdownLevel3 = level3_dropdown.contains(evt.target);
-    const isInputLevel2 = level2_field.contains(evt.target);
-    const isInputLevel3 = level3_field.contains(evt.target);
+    const isDropdownLevel2 = dropdown_menus[0].contains(evt.target)
+    const isDropdownLevel3 = dropdown_menus[1].contains(evt.target)
+    const isInputLevel2 = fields[0].contains(evt.target)
+    const isInputLevel3 = fields[1].contains(evt.target)
     if (!isDropdownLevel2 && !isInputLevel2) {
-        level2_dropdown.classList.remove('open');
+        dropdown_menus[0].classList.remove('open')
+        if (fields[0].value === '') {
+            fields[0].placeholder = 'State'
+        }
     }
     if (!isDropdownLevel3 && !isInputLevel3) {
-        level3_dropdown.classList.remove('open');
+        dropdown_menus[1].classList.remove('open')
+        if (fields[1].value === '') {
+            fields[1].placeholder = 'District'
+        }
     }
-});
+    
+})
 
 // auto complete level2
-level2_field.addEventListener('input', () => {
-    level2_dropdown.classList.add('open');
-    let inputValue = level2_field.value.toLowerCase();
-    let level2_item_array = [...document.querySelectorAll('ul#level2_dropdown.value-list li')]
+fields[0].addEventListener('input', () => {
+    dropdown_menus[0].classList.add('open')
+    let inputValue = fields[0].value.toLowerCase()
+    let item_array = [...document.querySelectorAll('ul#level2_dropdown.value-list li')].sort(function(a, b) { if (parseInt(a.id.slice(10)) < parseInt(b.id.slice(10))) {return -1} else {return 1}})
     if (inputValue.length > 0) {
-        for (let j = 0; j < level2_dropdown_values.length; j++) {
-            if (!(inputValue.substring(0, inputValue.length) === level2_dropdown_values[j].substring(0, inputValue.length).toLowerCase())) {
-                level2_item_array[j].classList.add('closed');
+        for (let j = 0; j < Object.values(dropdown_values[0]).length; j++) {
+            if (!(inputValue.substring(0, inputValue.length) === Object.values(dropdown_values[0])[j].substring(0, inputValue.length).toLowerCase())) {
+                item_array[j].classList.add('closed')
             } else {
-                level2_item_array[j].classList.remove('closed');
+                item_array[j].classList.remove('closed')
             }
         }
     } else {
-        for (let i = 0; i < level2_item_array.length; i++) {
-            level2_item_array[i].classList.remove('closed');
+        for (let i = 0; i < item_array.length; i++) {
+            item_array[i].classList.remove('closed')
         }
     }
-});
+})
 
 // auto complete level3
-level3_field.addEventListener('input', () => {
-    level3_dropdown.classList.add('open');
-    let inputValue = level3_field.value.toLowerCase();
-    let level3_item_array = [...document.querySelectorAll('ul#level3_dropdown.value-list li')]
+fields[1].addEventListener('input', () => {
+    dropdown_menus[1].classList.add('open')
+    let inputValue = fields[1].value.toLowerCase()
+    let item_array = [...document.querySelectorAll('ul#level3_dropdown.value-list li')].sort(function(a, b) { if (parseInt(a.id.slice(10)) < parseInt(b.id.slice(10))) {return -1} else {return 1}})
     if (inputValue.length > 0) {
-        for (let j = 0; j < level3_dropdown_values.length; j++) {
-            if (!(inputValue.substring(0, inputValue.length) === level3_dropdown_values[j].substring(0, inputValue.length).toLowerCase())) {
-                level3_item_array[j].classList.add('closed');
+        for (let j = 0; j < Object.values(dropdown_values[1]).length; j++) {
+            if (!(inputValue.substring(0, inputValue.length) === Object.values(dropdown_values[1])[j].substring(0, inputValue.length).toLowerCase())) {
+                item_array[j].classList.add('closed')
             } else {
-                level3_item_array[j].classList.remove('closed');
+                item_array[j].classList.remove('closed')
             }
         }
     } else {
-        for (let i = 0; i < level3_item_array.length; i++) {
-            level3_item_array[i].classList.remove('closed');
+        for (let i = 0; i < item_array.length; i++) {
+            item_array[i].classList.remove('closed')
         }
     }
-});
+})
 
-function setLevel1(Level1_ID) {
-    current_level1 = Level1_ID
-    current_level2 = undefined
-    current_level3 = undefined
-    level2_dropdown_values = []
-    $.getJSON('data/geo/level2/' + Level1_ID, function (data) {
-        $.each(data, function (key, val) {
-            level2_item = document.createElement('li')
-            level2_item.id = 'level2_dd_' + key
-            level2_item.addEventListener('click', function () {
-                setLevel2(this.id.slice(10))
-                setLineChart('level2', this.id.slice(10))
+function setLocation(level, id, start, stop) {
+    level = parseInt(level)
+    id = parseInt(id)
+    startDate = start.toLocaleDateString('en-CA')
+    stopDate = stop.toLocaleDateString('en-CA')
+
+    current_level = level
+
+    dropdown_menus[0].classList.remove('open')                                                                         // Close DropDown Menu
+    dropdown_menus[1].classList.remove('open')
+
+    if (level !== 3) {
+        $.getJSON(`data/geo/${level}/${id}`, function (data) {
+
+            if (level === 1) {
+                if (current_ids[1] !== undefined) {                                                                 // If Country is hidden -> show Country
+                    document.getElementById(`level1_map_${current_ids[1]}`).style.display = 'block'
+                }
+                document.getElementById(`level1_map_${id}`).style.display = 'none'                                  // Hide selected Country
+                current_ids[0] = id
+                current_ids[1] = undefined
+                current_ids[2] = undefined
+                dropdown_values[0] = {}
+                dropdown_values[1] = {}
+                fields[0].value = ''
+                fields[1].value = ''
+            } else {
+                if (current_ids[1] !== undefined) {                                                                 // If State is hidden: show State
+                    document.getElementById(`level2_map_${current_ids[1]}`).style.display = 'block'
+                }
+                document.getElementById(`level2_map_${id}`).style.display = 'none'                                  // Hide selected State
+                current_ids[1] = id
+                current_ids[2] = undefined
+                dropdown_values[1] = {}
+                fields[1].value = ''
+                fields[0].value = dropdown_values[level - 2][id]
+                $(dropdown_menus[1]).empty()
+            }
+
+            $.each(data, function (key, val) {
+                item = document.createElement('li')
+                item.id = `level${level + 1}_dd_${val.ID}`
+                item.addEventListener('click', function () { setLocation(level + 1, val.ID, start, stop) })
+                item.appendChild(document.createTextNode(val.Name))
+                dropdown_menus[level - 1].appendChild(item)
+                dropdown_values[level - 1][val.ID] = val.Name 
             })
-            level2_item.appendChild(document.createTextNode(val))
-            level2_dropdown.appendChild(level2_item)
-            level2_dropdown_values.push(val)
         })
-    })
-}
-
-function setLevel2(Level2_ID) {
-    level2_dropdown.classList.remove('open');                                                           // Close DropDown Menu
-    if (current_level2 !== undefined) {                                                                 // Show hidden Level2_item
-        document.getElementById('level2_map_' + current_level2).style.display = 'block'
+    } else {
+        fields[1].value = dropdown_values[level - 2][id]
     }
-    current_level2 = Level2_ID
-    current_level3 = undefined
-    document.getElementById('level2_map_' + Level2_ID).style.display = 'none'                           // Hide selected Level2_item
-    level3_field.value = ''
-    $.getJSON('data/geo/level3/' + Level2_ID, function (data) {
-        level2_field.value = Object.keys(data)[0]
-        $(level3_dropdown).empty()
-        $.each(data[Object.keys(data)[0]], function (key, val) {
-            level3_item = document.createElement('li')
-            level3_item.id = 'level3_dd_' + key
-            level3_item.addEventListener('click', function () {
-                setLevel3(this.id.slice(10))
-                setLineChart('level3', this.id.slice(10))
-            })
-            level3_item.appendChild(document.createTextNode(val))
-            level3_dropdown.appendChild(level3_item)
-            level3_dropdown_values.push(val)
-        })
-    })
+    loadPage(level, id, startDate, stopDate)
 }
 
-function setLevel3(Level3_ID) {
-    level3_dropdown.classList.remove('open');
-    current_level3 = Level3_ID
-    $.getJSON('data/geo/level3/', function (data) {
-        level3_field.value = data[Level3_ID]
-    })
-}
-
-function setLineChart(level, id) {
+function setLineChart(level, id, start, stop) {
+    level = parseInt(level)
+    id = parseInt(id)
 
     d3.select('#line').remove()
 
-    d3.json('/data/line/' + level + '/' + id).then(function(data) {
-        
-        var size = ({height: 350, width: 500})
-        var margin = ({top: 20, right: 60, bottom: 40, left: 60})
+    d3.json(`/data/line/${level}/${id}/${start}/${stop}`).then(function (data) {
+        var size = ({ height: 350, width: 500 })
+        var margin = ({ top: 20, right: 60, bottom: 40, left: 60 })
 
         var parseDate = d3.timeParse('%Y-%m-%d')
 
         var xAxis = g => g
             .attr('transform', `translate(0, ${size.height - margin.bottom})`)
             .call(d3.axisBottom(x)
-            .tickFormat(d3.timeFormat('%d.%m')))
+                .tickFormat(d3.timeFormat('%d.%m')))
 
         var y1Axis = g => g
             .attr('transform', `translate(${margin.left}, 0)`)
@@ -154,7 +168,7 @@ function setLineChart(level, id) {
         var y2Axis = g => g
             .attr('transform', `translate(${size.width - margin.right}, 0)`)
             .call(d3.axisRight(y2))
-
+            
         var x = d3.scaleUtc()
             .domain(d3.extent(data, d => parseDate(d.Date)))
             .range([margin.left, size.width - margin.right])
@@ -183,20 +197,20 @@ function setLineChart(level, id) {
             .attr('id', 'line')
             .attr('width', size.width + margin.left + margin.right)
             .attr('height', size.height + margin.top + margin.bottom)
-        
+
         svg.append('g')
             .call(y1Axis)
 
         svg.append('g')
             .call(y2Axis)
-        
+
         svg.append('g')
             .call(xAxis)
             .selectAll('text')
-                .attr('y', -2)
-                .attr('x', -10)
-                .attr('transform', 'rotate(-70)')
-                .style('text-anchor', 'end')
+            .attr('y', -2)
+            .attr('x', -10)
+            .attr('transform', 'rotate(-70)')
+            .style('text-anchor', 'end')
 
         svg.append('path')
             .datum(data)
@@ -219,30 +233,43 @@ function setLineChart(level, id) {
     })
 }
 
-function setBarChart(level, id) {
+function setBarChart(level, id, start, stop) {
+    level = parseInt(level)
+    id = parseInt(id)
 
     d3.select('#bar').remove()
 
-    d3.json('/data/bar/' + level + '/' + id).then(function(data) {
+    d3.json(`/data/bar/${level}/${current_ids[level-2]}/${start}/${stop}`).then(function (data) {
 
-        var size = ({height: 350, width: 500})
-        var margin = ({top: 20, right: 60, bottom: 40, left: 60})
+        var size = ({ height: 350, width: 500 })
+        var margin = ({ top: 20, right: 60, bottom: 40, left: 60 })
+        var counter = 0
+        var diff = []
+        
+        Object.keys(data).forEach(element => {
+            diff[counter] = { Cases: data[element][1]['Cases'] - data[element][0]['Cases'], Deaths: data[element][1]['Deaths'] - data[element][0]['Deaths'], Name: data[element][0]['Name'] }
+            counter++
+        })
+
+        diff.sort(function(a, b) { if (a.Deaths > b.Deaths) {return 1} else {return -1} {
+            
+        } })
 
         var xAxis = g => g
             .attr('transform', `translate(0, ${size.height - margin.bottom})`)
-            .call(d3.axisBottom(x).tickFormat(i => data[i].Name).tickSizeOuter(0))
+            .call(d3.axisBottom(x).tickFormat(i => diff[i].Name).tickSizeOuter(0))
 
         var yAxis = g => g
             .attr('transform', `translate(${margin.left}, 0)`)
             .call(d3.axisLeft(y))
 
         var x = d3.scaleBand()
-            .domain(d3.range(data.length))
+            .domain(d3.range(diff.length))
             .range([margin.left, size.width - margin.right])
             .padding(0.1)
 
         var y = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Cases)])
+            .domain([0, d3.max(diff, d => d.Cases)])
             .range([size.height - margin.bottom, margin.top])
 
         const svg = d3.select('#barchart')
@@ -251,56 +278,76 @@ function setBarChart(level, id) {
             .attr('id', 'bar')
             .attr('width', size.width + margin.left + margin.right)
             .attr('height', size.height + margin.top + margin.bottom)
-        
+
         svg.append('g')
             .call(yAxis)
-        
+
         svg.append('g')
             .call(xAxis)
-        console.log(data)
-        console.log(data.length)
+        
         svg.append('g')
             .selectAll('rect')
-            .data(data)
+            .data(diff)
             .join('rect')
-                .attr('x', (d, i) => (data.length === 1 ? '225' : x(i)))
-                .attr('y', d => y(d.Cases))
-                .attr('fill', d => d.ID == id ? '#18627f' : '#022d4d')
-                .attr('height', d => y(0) - y(d.Cases - d.Deaths))
-                .attr('width', (data.length === 1 ? size.width/10 : x.bandwidth()))
+            .attr('x', (d, i) => (diff.length === 1 ? '225' : x(i)))
+            .attr('y', d => Math.abs(y(d.Cases)))
+            .attr('fill', d => d.ID == id ? '#18627f' : '#022d4d')
+            .attr('height', d => y(0) - y(d.Cases - d.Deaths))
+            .attr('width', (diff.length === 1 ? size.width / 10 : x.bandwidth()))
 
         svg.append('g')
             .selectAll('rect')
-            .data(data)
+            .data(diff)
             .join('rect')
-                .attr('x', (d, i) => (data.length === 1 ? '225' : x(i)))
-                .attr('y', d => y(d.Deaths))
-                .attr('fill', '#ff9412')
-                .attr('height', d => y(0) - y(d.Deaths))
-                .attr('width', (data.length === 1 ? size.width/10 : x.bandwidth()))
+            .attr('x', (d, i) => (diff.length === 1 ? '225' : x(i)))
+            .attr('y', d => y(d.Deaths))
+            .attr('fill', '#ff9412')
+            .attr('height', d => y(0) - y(d.Deaths))
+            .attr('width', (diff.length === 1 ? size.width / 10 : x.bandwidth()))
     })
 }
 
-function setSummary(level, id) {
-    d3.json('/data/summary/' + level + '/' + id).then(function(data) {
-
+function setSummary(level, id, start, stop) {
+    d3.json(`/data/summary/${level}/${id}/${start}/${stop}`).then(function (data) {
         var format1 = d3.format(',')
         var format2 = d3.format('.4f')
+        
+        var deathratediff = format2(data[1].Deaths / data[1].Cases - data[0].Deaths / data[0].Cases)
 
-        var deathrate_change = (format2(data[1].Deaths / data[1].Cases - data[0].Deaths / data[0].Cases))
         d3.select('#location').node().innerHTML = data[1].Name
-        d3.select('#cases').node().innerHTML = format1(data[1].Cases).replaceAll(',', '.') + ' (+' + (format1(data[1].Cases - data[0].Cases)).replaceAll(',', '.') + ')'
-        d3.select('#deaths').node().innerHTML = format1(data[1].Deaths).replaceAll(',', '.') + ' (+' + (format1(data[1].Deaths - data[0].Deaths)).replaceAll(',', '.') + ')'
-        d3.select('#deathrate').node().innerHTML =  format2((data[1].Deaths / data[1].Cases)).replace('.', ',') + '% (' + (deathrate_change > 0 ? '+' + deathrate_change.replaceAll('.', ',') : '' + deathrate_change.replaceAll('.', ',')) + ')'
+        d3.select('#cases').node().innerHTML = format1(data[1].Cases).replaceAll(',', '.')
+        d3.select('#casesdiff').node().innerHTML = '+' + format1(data[1].Cases - data[0].Cases).replaceAll(',', '.')
+        d3.select('#deaths').node().innerHTML = format1(data[1].Deaths).replaceAll(',', '.')
+        d3.select('#deathsdiff').node().innerHTML = '+' + format1(data[1].Deaths - data[0].Deaths).replaceAll(',', '.')
+        d3.select('#deathrate').node().innerHTML = format2((data[1].Deaths / data[1].Cases)).replace('.', ',')
+        d3.select('#deathratediff').node().innerHTML = (parseInt(deathratediff) >= 0 ? '+' + deathratediff.replaceAll('.', ',') : '' + deathratediff.replaceAll('.', ','))
         d3.select('#population').node().innerHTML = format1(data[1].Population).replaceAll(',', '.')
+        
     })
 }
 
-function loadPage(level, id) {
-    setLineChart(level, id)
-    setBarChart(level, id)
-    setSummary(level, id)
+function loadPage(level, id, start, stop) {
+    setLineChart(level, id, start, stop)
+    setBarChart(level, id, start, stop)
+    setSummary(level, id, start, stop)
+}
+
+function setTime(direction) {
+    switch (current_interval) {
+        case 'Month':
+            direction === 'left' ? start.setMonth(start.getMonth() - 1) : start.setMonth(start.getMonth() + 1)
+            stop = new Date(start.getFullYear(), start.getMonth() + 1, 0)
+            loadPage(current_level, current_ids[current_level - 1], start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
+            break
+        case 'Year':
+            break
+        default:
+            break
+    }
 }
 
 //OnStart show Germany
-loadPage('level1', 49)
+setLocation(1, 49, start, stop)
+
+
+// TODO: Check Kaiserslautern. Negative Deaths due to SK and LK.
