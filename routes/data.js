@@ -89,6 +89,8 @@ router.get('/data/line/:level/:id/:start/:stop', function (req, res, next) {
 router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
 
     // Returns the BarChart data for 'date' (if there is no data available -> return latest available date before 'date').
+    // HINT: id ist id of the level above the give leven. level=2 (State) -> id is the countryID. Shows level2 data of level1 with given id.
+
     var data = {}
     var sqlString
     var countString = `SELECT COUNT(*) AS Regions FROM Level${req.params.level} WHERE Level${req.params.level}.Level${req.params.level - 1}_ID = ${req.params.id};`
@@ -101,7 +103,7 @@ router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
         }
         switch (req.params.level) {
             case '1':
-                sqlString = `SELECT * FROM (SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level1_Abbr AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID INNER JOIN Level1 ON Level2.Level1_ID = Level1.Level1_ID WHERE Date >= "${req.params.start}" GROUP BY Level1.Level1_ID, Date ORDER BY Date ASC LIMIT ${count[0].Regions}) UNION SELECT * FROM (SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level1_Abbr AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID INNER JOIN Level1 ON Level2.Level1_ID = Level1.Level1_ID WHERE Date <= "${req.params.stop}" GROUP BY Level1.Level1_ID, Date ORDER BY Date DESC LIMIT ${count[0].Regions});`
+                sqlString = `SELECT * FROM (SELECT SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, Level1_Abbr AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID INNER JOIN Level1 ON Level2.Level1_ID = Level1.Level1_ID WHERE Date >= "${req.params.start}" GROUP BY Level1.Level1_ID, Date ORDER BY Date ASC LIMIT ${count[0].Regions}) UNION SELECT * FROM (SELECT SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, Level1_Abbr AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID INNER JOIN Level1 ON Level2.Level1_ID = Level1.Level1_ID WHERE Date <= "${req.params.stop}" GROUP BY Level1.Level1_ID, Date ORDER BY Date DESC LIMIT ${count[0].Regions})`
                 break
             case '2':
                 sqlString = `SELECT * FROM (SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level2_Abbr AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date >= "${req.params.start}" AND Level2.Level1_ID = ${req.params.id} GROUP BY Level2.Level2_ID, Date ORDER BY Date ASC LIMIT ${count[0].Regions}) UNION SELECT * FROM (SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level2_Abbr AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date <= "${req.params.stop}" AND Level2.Level1_ID = ${req.params.id} GROUP BY Level2.Level2_ID, Date ORDER BY Date DESC LIMIT ${count[0].Regions});`
@@ -111,25 +113,25 @@ router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
                 break
             default:
                 res.render('error', { message: 'Invalid level:', error: { status: `${req.params.level} is not a valid level. The level variable describes the administrative level of a region. It should be 0 (World), 1 (Countries) or 2 (States).` } })
-                break
+                return
         }
         db.all(sqlString, [], (err, rows) => {
             if (err) {
                 res.render('error', { error: err })
+                return
             }
-            for (let index = 0; index < rows.length; index++) {
-                if (rows[index].Name in data) {
-                    data[rows[index].Name].push(rows[index])
-                } else {
-                    data[rows[index].Name] = [rows[index]]
-                }
+            if (rows.length != (2 * count[0].Regions)) {
+                res.json([])
+                return
+            }
+            for (let index = 0; index < (rows.length/2); index++) {
+                data[rows[index]] = {Name: rows[index].Name, Cases: rows[rows.length/2 + index].Cases - rows[index].Cases, Deaths: rows[rows.length/2 + index].Deaths - rows[index].Deaths} 
             }
             res.json(data)
+            return
         })
     })
 })
-
-// SUMMARY NOT WORKING -> COMBINE WITH BARCHART???????????????????????????????????????????????????????????????????????????????????????????????
 
 router.get('/data/summary/:level/:id/:start/:stop/', function (req, res, next) {
 

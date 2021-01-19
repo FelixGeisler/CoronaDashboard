@@ -6,6 +6,7 @@ const logger = require('morgan')
 const favicon = require('serve-favicon')
 const cron = require('node-cron')
 const database = require(path.join(__dirname, '/database/database.js'))
+const sqlite3 = require('sqlite3').verbose()
 
 const router = require(path.join(__dirname, '/routes/index'))
 
@@ -47,10 +48,13 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
+var db = new sqlite3.Database('database/db.sqlite')
+var counter = 137
+
 cron.schedule('0 * * * *', function () {
   console.log('Running cron job...')
   database.runDB()
-  // TODO: catch errors.
+
 })
 
 module.exports = app
