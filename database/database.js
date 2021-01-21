@@ -29,7 +29,7 @@ module.exports = {
             for (let i = 0; i < dataLk.length; i++) {
               db.run('REPLACE INTO CoronaData (Date, Level3_ID, Cases, Deaths, Population) VALUES(?, ?, ?, ?, ?)',
                 [
-                  new Date().toISOString().slice(0, 10),
+                  new Date().toLocaleDateString('en-CA'),
                   dataLk[i].attributes.OBJECTID,
                   dataLk[i].attributes.cases,
                   dataLk[i].attributes.deaths,

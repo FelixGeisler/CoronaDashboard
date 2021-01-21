@@ -47,9 +47,6 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
-
-//database.addData(34, "2020-01-01", "2021-01-19", 0, 0)
-
 cron.schedule('0 * * * *', function () {
   console.log('Running cron job...')
   database.runDB()
