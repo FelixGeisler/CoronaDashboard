@@ -12,7 +12,7 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   font-weight: 600;
 }
 
@@ -20,32 +20,62 @@ nav {
   position: relative;
   color: #fff;
   background-color: #022d4d;
-  height: 4rem;
+  height: 7vh;
+  width: 100vw;
   z-index: 2;
 }
 
-.chosen-value,
-.value-list {
-  position: absolute;
-  top: 0;
-  width: 20%;
-  color: #fff;
+.navbar-brand {
+  height: 100%;
+  width: 30vw;
+  cursor: pointer;
 }
 
-#level2, #level2_dropdown {
-  left: 60%;
-  z-index: 2;
+.navbar-brand:hover > #logo > svg {
+  transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
 }
 
-#level3, #level3_dropdown {
-  left: 80%;
-  z-index: 2;
+.navbar-brand > div, .navbar-brand > svg {
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+  margin: auto;
+}
+
+#logo {
+  height: 100%;
+  width: 2vw;
+  margin: 0;
+}
+
+#logo > svg {
+  height: 100%;
+  width: 100%;
+}
+
+#label {
+  font-weight: 600;
+  font-size: 1.6vw;
+  margin-left: 1.2vw;
+}
+
+#daterange {
+  cursor: pointer;
+  padding: 10px 10px;
+  border: 2px solid #ffffff;
+  border-radius: 25px;
+  width: 20vw;
+  height: 100%;
+  text-align: center;
+  font-size: 1.2vw;
+  font-weight: 600;
 }
 
 .chosen-value {
   font-weight: 600;
-  height: 4rem;
-  font-size: 1.1rem;
+  height: 7vh;
+  font-size: 1.2vw;
   padding: 1rem;
   background-color: #022d4d;
   border: 3px solid transparent;
@@ -71,9 +101,27 @@ nav {
   color: #fff;
 }
 
+.chosen-value,
+.value-list {
+  position: absolute;
+  top: 0;
+  width: 20vw;
+  color: #fff;
+}
+
+#level2, #level2_dropdown {
+  left: 60vw;
+  z-index: 2;
+}
+
+#level3, #level3_dropdown {
+  left: 80vw;
+  z-index: 2;
+}
+
 .value-list {
   list-style: none;
-  margin-top: 4rem;
+  margin-top: 7vh;
   box-shadow: 0px 5px 8px 0px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   max-height: 0;
@@ -85,7 +133,7 @@ nav {
 }
 .value-list li {
   position: relative;
-  height: 4rem;
+  height: 7vh;
   background-color: #022d4d;
   padding: 1rem;
   font-size: 1.1rem;
@@ -111,58 +159,62 @@ svg {
   transition-property: transform;
 }
 
-.navbar-brand {
-  cursor: pointer;
+#chartContent {
+  position: absolute;
+  left: 0;
+  top: 7vh;
+  height: 88vh;
+  width: 100vw;
 }
 
-.navbar-brand:hover > svg {
-  transform: rotate(90deg);
-  -webkit-transform: rotate(90deg);
+#tableContent {
+  position: absolute;
+  left: 0;
+  top: 100vh;
+  height: 88vh;
+  width: 100vw;
 }
 
-.navbar-brand > div, .navbar-brand > svg {
+#data, #map, #charts {
+  float: left;
+  width: 33.33vw;
   height: 100%;
-  text-align: center;
-  vertical-align: middle;
+}
+
+#summary {
   margin: auto;
 }
 
-#label {
-  font-weight: 600;
-  font-size: 1.6rem;
-  line-height: 32px;
-  margin-left: 1.2rem;
-}
-
 .footer {
-  height: 15%;
-  width: 100%;
+  height: 14vh;
+  width: 100vw;
   position: absolute;
-  top: 85%;
+  bottom: 0;
   left: 0;
 }
 
-.bottom {
-  height: 40%;
-  width: 100%;
+.tabs {
+  width: 50vw;
+  height: 100%;
   position: absolute;
-  top: 60%;
+  bottom: 0;
+  left: 25vw;
+  z-index: 1;
+}
+
+.bottom {
+  height: 5vh;
+  width: 100vw;
+  position: absolute;
+  bottom: 0;
   left: 0;
   background-color: #022d4d;
 }
 
-.tabs {
-  height: 80%;
-  width: 52%;
-  position: absolute;
-  top: 20%;
-  left: 24%;
-  z-index: 1;
-}
-
-.charts, .tables, .about {
+.charts, .tables {
   height: 100%;
-  width: 33.33%;
+  width: 50%;
+  padding: 2.5%;
   font-size: 1.6rem;
   color: white;
   text-align: center;
@@ -206,10 +258,6 @@ svg:hover .pen2 {
 
 .clippedTable {
   clip-path: url(#TabTable);
-}
-
-.clippedAbout {
-  clip-path: url(#TabAbout);
 }
 
 @keyframes draw {
@@ -334,6 +382,14 @@ svg g.Level3:hover path {
 
 .btn-primary {
   background-color: #ff9412 !important;
+}
+
+.row {
+  margin: 0 !important;
+}
+
+.tabulator-tableHolder {
+  max-height: 79vh !important;
 }
 
 /* 

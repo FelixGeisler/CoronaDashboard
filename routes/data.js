@@ -167,5 +167,36 @@ router.get('/data/summary/:level/:id/:start/:stop/', function (req, res, next) {
     })
 })
 
+router.get('/data/table/:level/:id/:start/:stop/', function (req, res, next) {
+
+    // Returns the summary data for 'date' (if there is no data available -> return latest available data before 'date').
+
+    var data = []
+    var sqlString
+
+    switch (req.params.level) {
+        case '1':
+            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level1_Name AS Name, Level1_Abbr AS Abbrevation, Level1.Level1_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID INNER JOIN Level1 ON Level2.Level1_ID = Level1.Level1_ID WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND Level1.Level1_ID = ${req.params.id} GROUP BY Date, Level1.Level1_ID;`
+            break
+        case '2':
+            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level2_Name AS Name, Level2_Abbr AS Abbrevation, Level2.Level2_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND Level2.Level2_ID = ${req.params.id} GROUP BY Date, Level2.Level2_ID;`
+            break
+        case '3':
+            sqlString = `SELECT Date, Cases AS Cases, Deaths AS Deaths, Population AS Population, Level3_Prefix AS Prefix, Level3_Name AS Name, Level3.Level3_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Date >= "${req.params.start}" AND Date <= "${req.params.stop}" AND Level3.Level3_ID = ${req.params.id};`
+            break
+        default:
+            res.render('error', { message: 'Invalid level:', error: { status: `${req.params.level} is not a valid level. The level variable describes the administrative level of a region. It should be 0 (World), 1 (Countries) or 2 (States).` } })
+            break
+    }
+    db.all(sqlString, [], (err, rows) => {
+        if (err) {
+            res.render('error', { error: err })
+        }
+        for (let index = 0; index < rows.length; index++) {
+            data.push(rows[index])
+        }
+        res.json(data)
+    })
+})
 
 module.exports = router

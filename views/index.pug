@@ -1,7 +1,7 @@
 extends layout
 
 block content
-    .row
+    .row#chartContent
         .col-lg-4#data
             .row.h-50
                 .col-lg-12#summary
@@ -45,7 +45,7 @@ block content
                         .col-lg-4#vaccinationdiff
 
         .col-lg-4#map
-            svg(width="650px" height="775px" viewBox="-50 -50 650 775")
+            svg(width="100%" height="100%" viewBox="0 0 525 750")
 
                 //- Schleswig-Holstein
                 g.Level3#level3_map_1(onclick='setLocation(this.id[5], this.id.slice(11), start, stop);')
@@ -1086,11 +1086,12 @@ block content
                 polygon(fill="#E3F3FB" stroke="#84AAD6" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="3.85" points="218.516,662.393 217.315,661.192 215.635,659.993 212.755,659.753 211.315,657.113 210.355,655.192 209.155,654.232 207.235,653.993 203.396,652.553 201.235,653.272 199.795,652.553 198.115,651.833 197.396,651.353 194.275,648.473 193.075,645.833 187.555,642.232 184.675,640.313 182.755,639.353 182.275,640.553 185.635,643.673 186.835,644.153 190.675,646.793 193.075,652.793 190.436,651.113 181.795,647.033 177.956,646.313 175.795,646.793 178.916,648.473 180.115,648.713 181.075,649.913 177.956,652.793 181.795,650.873 186.595,651.833 188.275,652.793 188.996,652.553 190.675,653.753 198.115,657.833 200.036,659.753 202.916,661.192 203.155,663.593 205.795,665.513 205.795,667.192 208.436,668.633 212.516,668.873 213.476,667.913 217.795,667.913 220.195,667.192 223.075,667.913 224.515,665.993 224.036,664.793 223.075,664.313 222.115,662.873 ")
                     
         .col-lg-4#charts
-            .row
+            .row.h-50
                 .col-lg-12#linechart
-            .row
+            .row.h-50
                 .col-lg-12#barchart
-
+    .row#tableContent
+    .row#aboutContent
 append scripts
     script(src='/javascripts/modules/d3.js')
     script(src='/javascripts/modules/moment.js')

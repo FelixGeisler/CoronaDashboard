@@ -214,11 +214,11 @@ function setLineChart(level, id, start, stop) {
             .range([margin.left, size.width - margin.right])
 
         var y1 = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Cases) * 2])
+            .domain([d3.min(data, d => d.Cases) * 0.9, d3.max(data, d => d.Cases) * 1.1]).nice()
             .range([size.height - margin.bottom, margin.top])
 
         var y2 = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Deaths) * 2])
+            .domain([d3.min(data, d => d.Deaths) * 0.9, d3.max(data, d => d.Deaths) * 1.1]).nice()
             .range([size.height - margin.bottom, margin.top])
 
         var cases = d3.line()
@@ -237,8 +237,8 @@ function setLineChart(level, id, start, stop) {
             .append('svg')
             .attr('viewBox', [0, 0, size.width, size.height])
             .attr('id', 'line')
-            .attr('width', size.width + margin.left + margin.right)
-            .attr('height', size.height + margin.top + margin.bottom)
+            .attr('width', '100%')
+            .attr('height', '100%')
 
         svg.append('g')
             .attr('id', 'axis_y1')
@@ -276,7 +276,19 @@ function setLineChart(level, id, start, stop) {
             .attr('stroke-linejoin', 'round')
             .attr('stroke-linecap', 'round')
             .attr('d', deaths)
-    })
+
+        svg.append("text")
+            .attr("x", 0)
+            .attr("y", 0)
+            .style("font-size", "12px")
+            .text('Cases (total)')
+
+        svg.append("text")
+            .attr("x", 420)
+            .attr("y", 0)
+            .style("font-size", "12px")
+            .text('Deaths (total)')
+        })
 }
 
 function setBarChart(level, id, start, stop) {
@@ -324,8 +336,8 @@ function setBarChart(level, id, start, stop) {
             .append('svg')
             .attr('viewBox', [0, 0, size.width, size.height])
             .attr('id', 'bar')
-            .attr('width', size.width + margin.left + margin.right)
-            .attr('height', size.height + margin.top + margin.bottom)
+            .attr('width', '100%')
+            .attr('height', '100%')
 
         legend = svg_legend => {
             const g = svg_legend
@@ -348,7 +360,7 @@ function setBarChart(level, id, start, stop) {
                 .attr("x", -24)
                 .attr("y", 9.5)
                 .attr("dy", "0.35em")
-                .text(d => d);
+                .text(d => `${d} (diff)`);
         }
 
         svg.append('g')
@@ -357,10 +369,10 @@ function setBarChart(level, id, start, stop) {
         svg.append('g')
             .call(xAxis)
             .selectAll('text')
-            .attr('y', -2)
-            .attr('x', -10)
-            .attr('transform', 'rotate(-60)')
-            .style('text-anchor', 'end')
+            .attr('text-anchor', 'end')
+            .attr('y', 7)
+            .attr('x', -7)
+            .attr('transform', 'rotate(-45)')
 
         svg.append('g')
             .selectAll('g')
@@ -408,6 +420,7 @@ function loadPage(level, id, start, stop) {
     setLineChart(level, id, start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
     setBarChart(level, id, start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
     setSummary(level, id, start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
+    setTable(level, id, start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
 }
 
 function setTime(direction) {
@@ -422,9 +435,9 @@ function setTime(direction) {
             stop = new Date()
             start = new Date(stop.getFullYear(), stop.getMonth(), 1)
         }
-    // else Interval = DateDiff
+        // else Interval = DateDiff
     } else {
-        dateDiff = Math.floor((stop - start) / (1000*60*60*24))
+        dateDiff = Math.floor((stop - start) / (1000 * 60 * 60 * 24))
         direction === 'left' ? start.setDate(start.getDate() - dateDiff) : start.setDate(start.getDate() + dateDiff)
         if (start < new Date('2020-01-01')) {
             start = new Date('2020-01-01')
@@ -436,6 +449,33 @@ function setTime(direction) {
         }
     }
     cb(start, stop)
+}
+
+
+function setTable(level, id, start, stop) {
+    $.getJSON(`data/table/${level}/${id}/${start}/${stop}/`, data => {
+        var table = new Tabulator("#tableContent", {
+            data: data,
+            autoColumns: true,
+            layout: 'fitColumns',
+            movableColumns: true,
+            resizableRows: true
+        })
+    })
+}
+
+
+// TODO: Animate this (slide).
+//Table
+function setContentTable() {
+    $("#tableContent").css({ top: '7vh' })
+    $("#chartContent").css({ top: '100vh' })
+}
+
+//Chart
+function setContentChart() {
+    $("#chartContent").css({ top: '7vh' })
+    $("#tableContent").css({ top: '100vh' })
 }
 
 //OnStart Select Germany

@@ -30,6 +30,7 @@ app.get('/data/geo/:level/:id?/', require(path.join(__dirname, '/routes/data')))
 app.get('/data/line/:level/:id/:start/:stop/', require(path.join(__dirname, '/routes/data')))
 app.get('/data/bar/:level/:id/:start/:stop/', require(path.join(__dirname, '/routes/data')))
 app.get('/data/summary/:level/:id/:start/:stop/', require(path.join(__dirname, '/routes/data')))
+app.get('/data/table/:level/:id/:start/:stop/', require(path.join(__dirname, '/routes/data')))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
