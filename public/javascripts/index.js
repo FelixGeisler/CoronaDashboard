@@ -1,12 +1,10 @@
-
 var fields = [document.getElementById('level2'), document.getElementById('level3')]
 var dropdown_menus = [document.getElementById('level2_dropdown'), document.getElementById('level3_dropdown')]
 var dropdown_values = [{}, {}]
 
-
 var current_ids = []
 var current_level
-var current_interval = 'Day'
+
 
 /* Useful dates
 var firstOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1)
@@ -18,10 +16,32 @@ var today = new Date()
 var start = new Date(new Date().setDate(new Date().getDate() - 1))
 var stop = new Date()
 
-/*
-var lineStart = new Date('2020-01-01')
-var lineEnd = new Date()
-*/
+// DateRangePicker
+function cb(dp_start, dp_stop) {
+    start = new Date(dp_start)
+    stop = new Date(dp_stop)
+    loadPage(current_level, current_ids[current_level - 1], start, stop)
+    $('#daterange').data('daterangepicker').remove()
+    createDRP()
+}
+
+function createDRP() {
+    $('#daterange').daterangepicker({
+        'startDate': start,
+        'endDate': stop,
+        'minDate': '01/01/2020',
+        'maxDate': new Date(),
+        ranges: {
+            'Today': [new Date(new Date().setDate(new Date().getDate() - 1)), new Date()],
+            'Yesterday': [new Date(new Date().setDate(new Date().getDate() - 2)), new Date(new Date().setDate(new Date().getDate() - 1))],
+            'Last 7 Days': [new Date(new Date().setDate(new Date().getDate() - 6)), new Date()],
+            'Last 30 Days': [new Date(new Date().setDate(new Date().getDate() - 29)), new Date()],
+            'This Month': [new Date(new Date().getFullYear(), new Date().getMonth(), 1), new Date()],
+            'Last Month': [new Date(new Date().getFullYear(), new Date().getMonth() - 1, 1), new Date(new Date().getFullYear(), new Date().getMonth(), 0)]
+        }
+    }, cb)
+}
+createDRP()
 
 // Show li items on focus
 fields[0].addEventListener('focus', () => {
@@ -98,12 +118,10 @@ fields[1].addEventListener('input', () => {
 function setLocation(level, id, start, stop) {
     level = parseInt(level)
     id = parseInt(id)
-    startDate = start.toLocaleDateString('en-CA')
-    stopDate = stop.toLocaleDateString('en-CA')
 
     current_level = level
 
-    dropdown_menus[0].classList.remove('open')                                                                      // Close DropDown Menu
+    dropdown_menus[0].classList.remove('open')
     dropdown_menus[1].classList.remove('open')
 
     if (level !== 3) {
@@ -166,7 +184,7 @@ function setLocation(level, id, start, stop) {
         current_ids[2] = id
         fields[1].value = dropdown_values[level - 2][id]
     }
-    loadPage(level, id, startDate, stopDate)
+    loadPage(level, id, start, stop)
 }
 
 function setLineChart(level, id, start, stop) {
@@ -196,11 +214,11 @@ function setLineChart(level, id, start, stop) {
             .range([margin.left, size.width - margin.right])
 
         var y1 = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Cases)*2])
+            .domain([0, d3.max(data, d => d.Cases) * 2])
             .range([size.height - margin.bottom, margin.top])
 
         var y2 = d3.scaleLinear()
-            .domain([0, d3.max(data, d => d.Deaths)*2])
+            .domain([0, d3.max(data, d => d.Deaths) * 2])
             .range([size.height - margin.bottom, margin.top])
 
         var cases = d3.line()
@@ -271,7 +289,9 @@ function setBarChart(level, id, start, stop) {
 
     d3.json(`/data/bar/${level}/${current_ids[level - 2]}/${start}/${stop}`).then(function (data) {
         var size = ({ height: 350, width: 500 })
-        var margin = ({ top: 20, right: 60, bottom: 40, left: 60 })
+        var margin = ({ top: 20, right: 60, bottom: 100, left: 60 })
+
+        data.sort((a, b) => (a.Cases <= b.Cases) ? 1 : -1)
 
         var color = d3.scaleOrdinal()
             .range(['#022d4d', '#ff9412'])
@@ -297,7 +317,7 @@ function setBarChart(level, id, start, stop) {
         var y = d3.scaleLinear()
             .domain([0, d3.max(data, d => d3.max(keys, key => d[key]))]).nice()
             .rangeRound([size.height - margin.bottom, margin.top])
-        
+
         d3.select('#bar').remove()
 
         const svg = d3.select('#barchart')
@@ -336,6 +356,11 @@ function setBarChart(level, id, start, stop) {
 
         svg.append('g')
             .call(xAxis)
+            .selectAll('text')
+            .attr('y', -2)
+            .attr('x', -10)
+            .attr('transform', 'rotate(-60)')
+            .style('text-anchor', 'end')
 
         svg.append('g')
             .selectAll('g')
@@ -379,49 +404,39 @@ function setSummary(level, id, start, stop) {
 }
 
 function loadPage(level, id, start, stop) {
-    setLineChart(level, id, start, stop)
-    setBarChart(level, id, start, stop)
-    setSummary(level, id, start, stop)
+    $('#daterange span').html(`${start.toLocaleDateString()}&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;${stop.toLocaleDateString()}`)
+    setLineChart(level, id, start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
+    setBarChart(level, id, start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
+    setSummary(level, id, start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
 }
 
 function setTime(direction) {
-    switch (current_interval) {
-        case 'Day':
-            console.log(start, stop)
-            direction === 'left' ? start.setDate(start.getDate() - 1) : start.setDate(start.getDate() + 1)
-            stop = new Date(new Date(start).setDate(start.getDate() + 1))
-            if (start < new Date('2020-01-01')) {
-                console.log('1')
-                start = new Date('2020-01-01')
-                stop = new Date(new Date(start).setDate(start.getDate() + 1))
-            }
-            if (stop > new Date()) {
-                console.log('2')
-                stop = new Date()
-                start = new Date(new Date(stop).setDate(stop.getDate() - 1))
-            }
-            console.log(start, stop)
-            loadPage(current_level, current_ids[current_level - 1], start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
-            break
-        case 'Month':
-            direction === 'left' ? start.setMonth(start.getMonth() - 1) : start.setMonth(start.getMonth() + 1)
-            stop = new Date(start.getFullYear(), start.getMonth() + 1, 0)
-            if (start < new Date('2020-01-01')) {
-                start = new Date('2020-01-01')
-                stop = new Date(start.getFullYear(), start.getMonth() + 1, 0)
-            }
-            if (stop > new Date()) {
-                start = new Date(start.getFullYear(), start.getMonth() - 1, 0)
-                stop = new Date()
-            }
-            loadPage(current_level, current_ids[current_level - 1], start.toLocaleDateString('en-CA'), stop.toLocaleDateString('en-CA'))
-            break
-        case 'Year':
-            break
-        default:
-            break
+    // If Month is selected -> Interval = Months
+    if (start.getDate() === 1 && stop.toLocaleDateString() === new Date(new Date(new Date(start).setMonth(start.getMonth() + 1)).setDate(0)).toLocaleDateString()) {
+        direction === 'left' ? start.setMonth(start.getMonth() - 1) : start.setMonth(start.getMonth() + 1)
+        if (start < new Date('2020-01-01')) {
+            start = new Date('2020-01-01')
+        }
+        stop = new Date(start.getFullYear(), start.getMonth() + 1, 0)
+        if (stop > new Date()) {
+            stop = new Date()
+            start = new Date(stop.getFullYear(), stop.getMonth(), 1)
+        }
+    // else Interval = DateDiff
+    } else {
+        dateDiff = Math.floor((stop - start) / (1000*60*60*24))
+        direction === 'left' ? start.setDate(start.getDate() - dateDiff) : start.setDate(start.getDate() + dateDiff)
+        if (start < new Date('2020-01-01')) {
+            start = new Date('2020-01-01')
+        }
+        stop = new Date(new Date(start).setDate(start.getDate() + dateDiff))
+        if (stop > new Date()) {
+            stop = new Date()
+            start.setDate(stop.getDate() - dateDiff)
+        }
     }
+    cb(start, stop)
 }
 
-//OnStart show Germany
+//OnStart Select Germany
 setLocation(1, 49, start, stop)

@@ -169,7 +169,7 @@ svg {
   z-index: 1;
 }
 
-.chart, .data, .doc {
+.charts, .tables, .about {
   height: 100%;
   width: 33.33%;
   font-size: 1.6rem;
@@ -219,8 +219,8 @@ svg:hover .pen2 {
   clip-path: url(#TabTable);
 }
 
-.clippedDoc {
-  clip-path: url(#TabDoc);
+.clippedAbout {
+  clip-path: url(#TabAbout);
 }
 
 @keyframes draw {
@@ -343,6 +343,10 @@ svg g.Level3:hover path {
   padding: 0;
   font-size: 0.8em !important;
   font-weight: normal;
+}
+
+.btn-primary {
+  background-color: #ff9412 !important;
 }
 
 /* 

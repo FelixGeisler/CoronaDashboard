@@ -109,13 +109,13 @@ router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
 
     switch (req.params.level) {
         case '1':
-            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level1.Level1_Abbr AS Name, Level1.Level1_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID INNER JOIN Level1 ON Level2.Level1_ID = Level1.Level1_ID WHERE Date = "${start}" OR Date = "${stop}" GROUP BY Date, Level1.Level1_ID;`
+            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, Level1.Level1_Abbr AS Name, Level1.Level1_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID INNER JOIN Level1 ON Level2.Level1_ID = Level1.Level1_ID WHERE Date = "${start}" OR Date = "${stop}" GROUP BY Date, Level1.Level1_ID;`
             break
         case '2':
-            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, SUM(Population) AS Population, Level2.Level2_Abbr AS Name, Level2.Level2_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date = "${start}" OR Date = "${stop}" GROUP BY Date, Level2.Level2_ID;`
+            sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, Level2.Level2_Abbr AS Name, Level2.Level2_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date = "${start}" OR Date = "${stop}" GROUP BY Date, Level2.Level2_ID;`
             break
         case '3':
-            sqlString = `SELECT * FROM (SELECT Date, Cases, Deaths, Population, Level3_Name AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Date >= "${req.params.start}" AND Level3.Level2_ID = ${req.params.id} ORDER BY Date ASC LIMIT ${count[0].Regions}) UNION SELECT * FROM (SELECT Date, Cases, Deaths, Population, Level3_Name AS Name FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Date <= "${req.params.stop}" AND Level3.Level2_ID = ${req.params.id} ORDER BY Date DESC LIMIT ${count[0].Regions});`
+            sqlString = `SELECT * FROM (SELECT Date, Cases AS Cases, Deaths AS Deaths, Level3.Level3_Prefix AS Prefix, Level3.Level3_Name AS Name, Level3.Level3_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level3.Level2_ID = ${req.params.id} AND Date = "${start}" ORDER BY Cases LIMIT 20) UNION SELECT * FROM (SELECT Date, Cases AS Cases, Deaths AS Deaths, Level3.Level3_Prefix AS Prefix, Level3.Level3_Name AS Name, Level3.Level3_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level3.Level2_ID = ${req.params.id} AND Date = "${stop}" ORDER BY Cases LIMIT 20);`
             break
         default:
             res.render('error', { message: 'Invalid level:', error: { status: `${req.params.level} is not a valid level. The level variable describes the administrative level of a region. It should be 0 (World), 1 (Countries) or 2 (States).` } })
@@ -128,7 +128,7 @@ router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
         }
         if (rows.length === 1) { rows[1] = rows[0]}
         for (let index = 0; index < (rows.length / 2); index++) {
-            data.push({ Name: rows[index].Name, Cases: rows[rows.length / 2 + index].Cases - rows[index].Cases, Deaths: rows[rows.length / 2 + index].Deaths - rows[index].Deaths })
+            data.push({ Name:  (req.params.id !== '3' || rows[index].Prefix === 'LK' || rows[index].Prefix === 'Bezirk') ? rows[index].Name : `${rows[index].Prefix} ${rows[index].Name}`, Cases: rows[rows.length / 2 + index].Cases - rows[index].Cases, Deaths: rows[rows.length / 2 + index].Deaths - rows[index].Deaths })
         }
         res.json(data)
         return
