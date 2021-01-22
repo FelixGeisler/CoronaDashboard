@@ -9,33 +9,6 @@
 [![GitHub Commits](https://img.shields.io/github/commit-activity/w/FelixGeisler/CoronaDashboard)](https://github.com/FelixGeisler/CoronaDashboard/commits/main)  
 [![GitHub Issues](https://img.shields.io/github/issues/FelixGeisler/CoronaDashboard)](https://github.com/FelixGeisler/CoronaDashboard/issues)
 
-## API
-
-We query the API of the [RKI](https://npgeo-corona-npgeo-de.hub.arcgis.com/datasets/917fc37a709542548cc3be077a786c17_0) every hour and store the received data in our database. It is possible to make specific queries to our database via our API.
-
-The route to the api is: `/api/:date?/:level1?/:level2?`
-
-### Get all data
-
-To select all data call `/api`
-<br>
-
-### Filter by Date
-
-It is possible to filter the data by a specific day (`/api/yyyy-mm-dd`), month (`/api/yyyy-mm`) or year (`/api/yyyy`).
-You can also specify a date range e.g.: `/api/yyyy-mm-dd_yyyy-mm-dd`, `/api/yyyy-mm_yyyy`, `/api/yyyy-mm-dd_` (given startDate till today), etc...
-<br>
-
-### Filter by Admin_Level_1
-
-To filter the data by Admin_Level_1 (e.g. Bundesland) specify it in the link: e.g. `/api/yyyy-mm-dd/Baden-Württemberg/`
-<br>
-
-### Filter by Admin_Level_2
-
-To filter the data by a Admin_Level_2 (e.g. Landkreis) specify it in the link: e.g. `/api/yyyy-mm-dd/Baden-Württemberg/LKZollernalbkreis`
-<br>
-
 ## Software Architecture
 
 ### Use-Case-Diagram
