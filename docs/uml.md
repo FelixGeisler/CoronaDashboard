@@ -49,16 +49,63 @@ deactivate WebServer
 deactivate Database
 end
 
-Group #LightBlue Show Table/Diagrams/API
-Client -> WebServer: Get /data/:date?/:location?/
+Group #LightBlue Get GeoData
+Client -> WebServer: Get /data/geo/:level/:id?/
+activate WebServer
 activate Client
 WebServer -> Database: Select Data
+activate Database
 Database --> WebServer: Send Data
-WebServer -> WebServer: Calculations
 deactivate Database 
+WebServer -> WebServer: Calculations
 WebServer --> Client: Send Data
 deactivate WebServer
-Client -> Client: Visualize Data\nTable/Diagrams/API
+Client -> Client: Fill DropDown
+end
+deactivate Client
+
+Group #LightBlue Show Diagrams
+Client -> WebServer: Get /data/type/:level/:id/:start/:stop
+activate WebServer
+activate Client
+WebServer -> Database: Select Data
+activate Database
+Database --> WebServer: Send Data
+deactivate Database 
+WebServer -> WebServer: Calculations
+WebServer --> Client: Send Data
+deactivate WebServer
+Client -> Client: Visualize Data (bar & line diagram)
+end
+deactivate Client
+
+Group #LightBlue Show Summary
+Client -> WebServer: Get /data/summary/:level/:id/:start/:stop
+activate WebServer
+activate Client
+WebServer -> Database: Select Data
+activate Database
+Database --> WebServer: Send Data
+deactivate Database 
+WebServer -> WebServer: Calculations
+WebServer --> Client: Send Data
+deactivate WebServer
+Client -> Client: Visualize Data (summary)
+end
+deactivate Client
+
+Group #LightBlue Show Table
+Client -> WebServer: Get /data/table/:level/:id/:start/:stop/
+activate WebServer
+activate Client
+WebServer -> Database: Select Data
+activate Database
+Database --> WebServer: Send Data
+deactivate Database 
+WebServer -> WebServer: Calculations
+WebServer --> Client: Send Data
+deactivate WebServer
+Client -> Client: Visualize Data (table)
 end
 deactivate Client
 ```
