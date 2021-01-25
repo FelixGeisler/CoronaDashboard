@@ -9,15 +9,18 @@ actor User as U
 
 rectangle "Corona Dashboard" #azure {
     S -- (Write to DB)
-    
-    U -- (Show Table)
-    (Show Table) <.. S
-    
+
+    U -- (Get GeoData)
+    (Get GeoData) <.. S
+
     U -- (Show Diagrams)
     (Show Diagrams) <.. S
 
-    U -- (Show API)
-    (Show API) <.. S
+    U -- (Show Summary)
+    (Show Summary) <.. S
+
+    U -- (Show Table)
+    (Show Table) <.. S
 }
 ```
 
