@@ -26,3 +26,5 @@ jobs:
     - run: npm start &
 
     - run: newman run './tests/CoronaDashboard.postman_collection.json'
+
+    - run: node ./tests/ui-test.js
