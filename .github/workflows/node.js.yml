@@ -31,7 +31,7 @@ jobs:
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'corona-dashboad'
+        app-name: 'corona-dashboard'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_bacf68c6c5dd4164b99000f0e42c798d }}
         package: .
