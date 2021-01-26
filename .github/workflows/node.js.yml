@@ -29,3 +29,4 @@ jobs:
       uses: matt-ball/newman-action@v0.2.4
       with:
         collection: '.\tests\dashboard.postman_collection.json'
+    - run: newman run
