@@ -28,8 +28,10 @@ jobs:
 
     - run: newman run './tests/dashboard.postman_collection.json'
     
-    - name: Azure WebApp deployment
+    - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: corona-dashboard
-        publish-profile: ${{ secrets.CORONA_DASHBOARD }}
+        app-name: 'corona-dashboad'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_bacf68c6c5dd4164b99000f0e42c798d }}
+        package: .
