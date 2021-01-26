@@ -24,3 +24,5 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    - run: npm install -g newman
+    - run: newman run './tests/dashboard.postman_collection.json'
