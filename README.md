@@ -19,7 +19,7 @@
 
 - <b>Write to DB:</b>
 Server queries RKI-API regularly and stores the data with the current date in the db.
-- <b>Show API/Table/Diagrams:</b>
+- <b>Show Table/Diagrams:</b>
 User defines location and time-range. Server queries necessary data from the db and sends them to the user as JSON. Data visualization via chart.js/d3.js/tabulator.js on client side in case of Show Table/Diagrams.
 <br>
 
@@ -31,5 +31,5 @@ User defines location and time-range. Server queries necessary data from the db 
 
 - <b>Write to DB:</b>
     Server queries RKI API regularly and stores data in db. We use (Current_Date, Admin_Level_2) as Primary Key. If Key already exists, entry gets overwritten (Replace Into).
-- <b>Show API/Table/Diagrams:</b>
+- <b>Show Table/Diagrams:</b>
     Client sends GET-Request and defines location and time-range. Server selects necessary data from the db and extends them with some calculated data. Server sends data to Client. Client visualizes data.
