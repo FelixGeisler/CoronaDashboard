@@ -10,9 +10,9 @@ jobs:
   newman:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: matt-ball/newman-action@master
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          apiKey: ${{ secrets.postmanApiKey }}
-          collection: postman_collection.json
-          environment: 5922408-228c7edd-fc15-4f68-9665-a35d7df6945b
+          node-version: '15'
+      - run: npm install -g newman
+      - run: newman run '.\tests\dashboard.postman_collection.json'
