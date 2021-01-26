@@ -1,0 +1,384 @@
+{
+	"info": {
+		"_postman_id": "e4f5c6d0-4837-4ff1-a79b-06528b949f47",
+		"name": "CoronaDashboard",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GeoData",
+			"item": [
+				{
+					"name": "Get GeoData Countries",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/geo/0/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"geo",
+								"0",
+								""
+							]
+						},
+						"description": "Get all Countries"
+					},
+					"response": []
+				},
+				{
+					"name": "Get GeoData States",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/geo/1/49",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"geo",
+								"1",
+								"49"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get GeoData Districts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/geo/2/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"geo",
+								"2",
+								"8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "LineChartData",
+			"item": [
+				{
+					"name": "Get LineChartData Country",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/line/1/49/2020-01-01/2021-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"line",
+								"1",
+								"49",
+								"2020-01-01",
+								"2021-01-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LineChartData State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/line/2/8/2020-01-01/2021-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"line",
+								"2",
+								"8",
+								"2020-01-01",
+								"2021-01-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get LineChartData District",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/line/3/1/2020-01-01/2021-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"line",
+								"3",
+								"1",
+								"2020-01-01",
+								"2021-01-01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "BarChartData",
+			"item": [
+				{
+					"name": "Get BarChartData Country",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/bar/1/49/2020-01-01/2021-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"bar",
+								"1",
+								"49",
+								"2020-01-01",
+								"2021-01-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get BarChartData State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/bar/2/8/2020-01-01/2021-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"bar",
+								"2",
+								"8",
+								"2020-01-01",
+								"2021-01-01"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get BarChartData District",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/bar/3/1/2020-01-01/2021-01-01",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"bar",
+								"3",
+								"1",
+								"2020-01-01",
+								"2021-01-01"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "SummaryData",
+			"item": [
+				{
+					"name": "Get SummaryData District",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/summary/1/49/2020-01-01/2021-01-01/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"summary",
+								"1",
+								"49",
+								"2020-01-01",
+								"2021-01-01",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SummaryData State",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/summary/2/8/2020-01-01/2021-01-01/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"summary",
+								"2",
+								"8",
+								"2020-01-01",
+								"2021-01-01",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SummaryData District",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/data/summary/3/1/2020-01-01/2021-01-01/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"data",
+								"summary",
+								"3",
+								"1",
+								"2020-01-01",
+								"2021-01-01",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "RKI-API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://services7.arcgis.com/mOBPykOjAyBO2ZKk/arcgis/rest/services/RKI_Landkreisdaten/FeatureServer/0/query?where=1%3D1&outFields=OBJECTID,SN_V1,EWZ,cases,deaths&returnGeometry=false&orderByFields=OBJECTID&outSR=&f=json",
+							"protocol": "https",
+							"host": [
+								"services7",
+								"arcgis",
+								"com"
+							],
+							"path": [
+								"mOBPykOjAyBO2ZKk",
+								"arcgis",
+								"rest",
+								"services",
+								"RKI_Landkreisdaten",
+								"FeatureServer",
+								"0",
+								"query"
+							],
+							"query": [
+								{
+									"key": "where",
+									"value": "1%3D1"
+								},
+								{
+									"key": "outFields",
+									"value": "OBJECTID,SN_V1,EWZ,cases,deaths"
+								},
+								{
+									"key": "returnGeometry",
+									"value": "false"
+								},
+								{
+									"key": "orderByFields",
+									"value": "OBJECTID"
+								},
+								{
+									"key": "outSR",
+									"value": ""
+								},
+								{
+									"key": "f",
+									"value": "json"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
