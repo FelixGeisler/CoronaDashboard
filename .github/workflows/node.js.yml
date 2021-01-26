@@ -27,4 +27,4 @@ jobs:
 
     - run: newman run './tests/CoronaDashboard.postman_collection.json'
 
-    - run: node .\tests\ui-test.js
+    - run: node ./tests/ui-test.js
