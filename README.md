@@ -14,7 +14,7 @@
 ### Use-Case-Diagram
 
 <div align='center'>
-<img src='http://www.plantuml.com/plantuml/png/ROknJiD038PtFyMlii3GFW53WIniI4V4x2OcEVNkNFaS423U7P56KOLOBFd_lczVdSsdd2Z9gyCL5eVHqKUJpgCMgiTOJcoSSUBko8DK_qY2NynbI491x4qCN168ErT3Myz_IxHgs3oeQM4qNCU3ilKRNF7dP88l0e20xHRNBnPTu8hc_cQUvzFEB8pwZcS-93cZom6tknt2lqKJUJ3ETOqkjwNxszmzFIxw-YxcD-sbz5DEFm00'/>
+<img src='http://www.plantuml.com/plantuml/png/TSinJiD048NXVa_n51fI92UW0aivm69HlpY3lOgz4yrEG05nTyGI8RP8ET-yVvPNXoiiZPFZa4m6Jvf3EQPyed71YSEHenI_p8AVD_CuIuXYRs9WGGmSN0rz-Rtx4FvcM3sfQIOwbccljCCAT_muc-0p0434PeFx5qikS4Ntk0xL--exSUn4EphNbHl1mtQB-7yV9tr7bpWQbt8jMhlHnFEoq2urQUbMySpzB7NVm7NzzGq0'/>
 </div>
 
 - <b>Write to DB:</b>
@@ -26,7 +26,7 @@ User defines location and time-range. Server queries necessary data from the db 
 ### Sequence-Diagram
 
 <div align='center'>
-<img src='http://www.plantuml.com/plantuml/png/RL5DQm8n4BtdLmnwbhtleLeLHDf3qL8llSokWmRYPic7BVxw3gQE2UIoB6_UUtblPk43kX0lHdNs5rP6qn1WYhVeI8qyqRqUaQ4qKJGSWOdgpjwJkvAhiG_KfM61hZ5WXvvAbzUFhQzvJ7PlM-3Xv4dVE1j7cBxhqpaiJIGuE1q8WeNrKicRC7jvYblOK53O1tr5fWf9eEmT-OCPMmYrXJqdK4UgI0IIRdaCGLlOqMYm9z13iBcLq3EmM5IbzVviV-0JEqFDMkF9uSKtd4RzNw_CplMXER9Xq_ANvarhR8z1ss7UIFp7UUlXkR-XFjrFFT3QZX93G2WPApHzDFUdVQqjv4gMfaoPStrlqbe4Nzf7DFgMhB-7oghae4Nz1SFnOlu0'>
+<img src='http://www.plantuml.com/plantuml/png/xPCnR_em4CLtVueJI7_zEw3i6LeAKH5gXufKPRua9x3an95ZG-7Jry7K999fn5m6H7JtkxFVU_AqqQYqAGNBv1VC1QTAmnYFHX6hROVdl4PRSXr6LG4MP2Sw9RKZ5QBNbBbchvgWnWmRwczvVbyseHsZrUkoROuk-499KyFuZM-sUYOCmLfnJQ0b93FcpuJ9usKuXWLfXhdcExIeXtofSux_WebTuT7O2gqALb1Wn9UyjkurV3M65TK2Sm9UQTbTvV5EiMTKGBLLP7-ofTWviVvzMo0gR3lQa8nYGJiIKSoBf-XN9zokQmfI4fIx40EoVpv2rhcPW3xedzKPcwF8ZK3DPTLq8KkvMuOszrHvO_p02nS24YNhHEuhre_q30NCJhTo3md7ZSAo6R9R7shg-1t5fzVL_idwBrl_oHk3WX_T-V0_GmN_GF2Ae73MFjmMI6hA4jLXA8_6OSEHt2CvMtLZ3X-O2Hfy5IrqBOFeOjyzX9DJroAOsh8fnJS0'>
 </div>
 
 - <b>Write to DB:</b>
