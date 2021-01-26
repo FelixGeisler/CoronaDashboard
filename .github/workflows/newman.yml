@@ -15,4 +15,4 @@ jobs:
         with:
           node-version: '15'
       - run: npm install -g newman
-      - run: newman run '.\tests\dashboard.postman_collection.json'
+      - run: newman run './tests/dashboard.postman_collection.json'
