@@ -27,3 +27,9 @@ jobs:
     - run: npm test
     - run: npm install -g newman
     - run: newman run './tests/dashboard.postman_collection.json'
+    
+    - name: Azure WebApp deployment
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: corona-dashboard
+        publish-profile: ${{ secrets.CORONA_DASHBOARD }}
