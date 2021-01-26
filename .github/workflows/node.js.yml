@@ -28,3 +28,11 @@ jobs:
       
     - run: npm start &
     - run: newman run './tests/CoronaDashboard.postman_collection.json'
+
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'corona-dashboard'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_b1c9de0d9c5b42b1b58658c9a0326706 }}
+        package: .
