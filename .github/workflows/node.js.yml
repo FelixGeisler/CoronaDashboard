@@ -26,7 +26,10 @@ jobs:
     - run: npm test
 
     - name: Newman CLI (Postman)
-      uses: matt-ball/newman-action@v0.2.4
+      id: run-newman
+      uses: anthonyvscode/newman-action@v1
       with:
         collection: '.\tests\dashboard.postman_collection.json'
-    - run: newman run
+        
+    - name: Output summary to console
+      run: echo ${{ steps.run-newman.outputs.summary }}
