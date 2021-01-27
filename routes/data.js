@@ -115,7 +115,7 @@ router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
             sqlString = `SELECT Date, SUM(Cases) AS Cases, SUM(Deaths) AS Deaths, Level2.Level2_Abbr AS Name, Level2.Level2_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID INNER JOIN Level2 ON Level3.Level2_ID = Level2.Level2_ID WHERE Date = "${start}" OR Date = "${stop}" GROUP BY Date, Level2.Level2_ID;`
             break
         case '3':
-            sqlString = `SELECT * FROM (SELECT Date, Cases AS Cases, Deaths AS Deaths, Level3.Level3_Prefix AS Prefix, Level3.Level3_Name AS Name, Level3.Level3_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level3.Level2_ID = ${req.params.id} AND Date = "${start}" ORDER BY Cases LIMIT 20) UNION SELECT * FROM (SELECT Date, Cases AS Cases, Deaths AS Deaths, Level3.Level3_Prefix AS Prefix, Level3.Level3_Name AS Name, Level3.Level3_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level3.Level2_ID = ${req.params.id} AND Date = "${stop}" ORDER BY Cases LIMIT 20);`
+            sqlString = `SELECT * FROM (SELECT * FROM (SELECT Date, Cases AS Cases, Deaths AS Deaths, Level3.Level3_Prefix AS Prefix, Level3.Level3_Name AS Name, Level3.Level3_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level3.Level2_ID = ${req.params.id} AND Date = "${req.params.start}" ORDER BY Cases LIMIT 20) ORDER BY ID) UNION ALL SELECT * FROM (SELECT * FROM (SELECT Date, Cases AS Cases, Deaths AS Deaths, Level3.Level3_Prefix AS Prefix, Level3.Level3_Name AS Name, Level3.Level3_ID AS ID FROM CoronaData INNER JOIN Level3 ON CoronaData.Level3_ID = Level3.Level3_ID WHERE Level3.Level2_ID = ${req.params.id} AND Date = "${req.params.stop}" ORDER BY Cases LIMIT 20) ORDER BY ID);`
             break
         default:
             res.render('error', { message: 'Invalid level:', error: { status: `${req.params.level} is not a valid level. The level variable describes the administrative level of a region. It should be 0 (World), 1 (Countries) or 2 (States).` } })
@@ -126,8 +126,10 @@ router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
             res.render('error', { error: err })
             return
         }
+        console.log(rows)
         if (rows.length === 1) { rows[1] = rows[0]}
         for (let index = 0; index < (rows.length / 2); index++) {
+            console.log(rows[rows.length / 2 + index].Name, rows[rows.length / 2 + index].Deaths, rows[index].Name, rows[index].Deaths, rows[rows.length / 2 + index].Deaths - rows[index].Deaths)
             data.push({ Name:  (req.params.id !== '3' || rows[index].Prefix === 'LK' || rows[index].Prefix === 'Bezirk') ? rows[index].Name : `${rows[index].Prefix} ${rows[index].Name}`, Cases: rows[rows.length / 2 + index].Cases - rows[index].Cases, Deaths: rows[rows.length / 2 + index].Deaths - rows[index].Deaths })
         }
         res.json(data)
