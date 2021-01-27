@@ -48,6 +48,9 @@ app.use(function (err, req, res, next) {
   res.render('error')
 })
 
+
+database.runDB() // TODO: Remove this.
+
 cron.schedule('0 * * * *', function () {
   console.log('Running cron job...')
   database.runDB()
