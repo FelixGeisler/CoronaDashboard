@@ -129,7 +129,6 @@ router.get('/data/bar/:level/:id/:start/:stop/', function (req, res, next) {
         console.log(rows)
         if (rows.length === 1) { rows[1] = rows[0]}
         for (let index = 0; index < (rows.length / 2); index++) {
-            console.log(rows[rows.length / 2 + index].Name, rows[rows.length / 2 + index].Deaths, rows[index].Name, rows[index].Deaths, rows[rows.length / 2 + index].Deaths - rows[index].Deaths)
             data.push({ Name:  (req.params.id !== '3' || rows[index].Prefix === 'LK' || rows[index].Prefix === 'Bezirk') ? rows[index].Name : `${rows[index].Prefix} ${rows[index].Name}`, Cases: rows[rows.length / 2 + index].Cases - rows[index].Cases, Deaths: rows[rows.length / 2 + index].Deaths - rows[index].Deaths })
         }
         res.json(data)
