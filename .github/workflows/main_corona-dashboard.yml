@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'corona-dashboard'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_b1c9de0d9c5b42b1b58658c9a0326706 }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_79b9e9af6f944c53b7660bed83723460 }}
         package: .
