@@ -26,11 +26,9 @@
     "morgan": "^1.10.0",
     "node-cron": "^2.0.3",
     "pug": "^3.0.0",
-    "puppeteer": "^5.5.0",
     "serve-favicon": "^2.5.0",
     "sqlite3": "^5.0.0",
-    "tabulator-tables": "^4.9.1",
-    "three": "^0.122.0"
+    "tabulator-tables": "^4.9.1"
   },
   "description": "",
   "main": "app.js",
