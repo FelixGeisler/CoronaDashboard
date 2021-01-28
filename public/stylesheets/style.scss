@@ -245,21 +245,7 @@ svg {
   animation-fill-mode: forwards;
 }
 
-.pen2 {
-  fill: none;
-  stroke: white;
-  stroke-width: 4.0;
-
-  stroke-dasharray: 160 160;
-  stroke-dashoffset: 160;
-  animation-duration: 2s;
-  animation-name: draw2;
-  animation-timing-function: linear;
-  animation-fill-mode: forwards;
-}
-
-svg:hover .pen,
-svg:hover .pen2 {
+svg:hover .pen {
   animation-direction: alternate;
   animation-iteration-count: infinite;
 }
@@ -275,14 +261,6 @@ svg:hover .pen2 {
 @keyframes draw {
   from {
     stroke-dashoffset: 230;
-  } to {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes draw2 {
-  from {
-    stroke-dashoffset: 160;
   } to {
     stroke-dashoffset: 0;
   }
