@@ -409,8 +409,8 @@ function setSummary(level, id, start, stop) {
             d3.select('#deaths').node().innerHTML = format1(data[1].Deaths).replaceAll(',', '.')
             d3.select('#deathsdiff').node().innerHTML = `+ ${format1(data[1].Deaths - data[0].Deaths).replaceAll(',', '.')}`
 
-            d3.select('#deathrate').node().innerHTML = format2((data[1].Deaths / data[1].Cases)).replace('.', ',')
-            d3.select('#deathratediff').node().innerHTML = (parseInt(deathratediff) >= 0 ? '+' + deathratediff.replaceAll('.', ',') : '' + deathratediff.replaceAll('.', ','))
+            d3.select('#deathrate').node().innerHTML = format2((data[1].Deaths / data[1].Cases)).replace('.', ',') + '%'
+            d3.select('#deathratediff').node().innerHTML = (parseInt(deathratediff) >= 0 ? '+' + deathratediff.replaceAll('.', ',') : '' + deathratediff.replaceAll('.', ',')) + '%'
         }
     })
 }
